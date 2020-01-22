@@ -26,3 +26,4 @@
 /config/master.key
 dump.rdb
 .ruby-version
+.idea
