@@ -103,5 +103,4 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   config.action_cable.url = 'ws://localhost:3000/cable'
-  config.action_cable.disable_request_forgery_protection = true
 end
