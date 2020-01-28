@@ -45,8 +45,11 @@ development:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+#production:
+#  <<: *default
+#  database: T_bone_production
+#  username: T_bone
+#  password: <%#= ENV['T_BONE_DATABASE_PASSWORD'] %>
 production:
   <<: *default
-  database: T_bone_production
-  username: T_bone
-  password: <%= ENV['T_BONE_DATABASE_PASSWORD'] %>
+  database: scarfs
