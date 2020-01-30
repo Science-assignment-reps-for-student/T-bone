@@ -34,6 +34,6 @@ module TBone
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.time_zone = 'Seoul'
-    config.active_record.default_timezone = :local
+    config.active_record.default_timezone = :utc
   end
 end
