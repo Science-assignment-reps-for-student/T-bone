@@ -1,12 +1,15 @@
 class ApiController < ApplicationController
-   before_action :jwt_required
+  before_action :jwt_required
 
   def show
     requires(:homework_id)
     homework = Homework.find_by_id(params[:homework_id])
     return render status: 404 unless homework
 
-    send_file(homework.notice_file.source)
+    homework.notice_files.each do |file|
+      send_file(file.source)
+    end
+
     render json: { homework_title: homework.homework_title,
                    homework_description: homework.homework_description,
                    homework_type: homework.homework_type,
@@ -15,7 +18,7 @@ class ApiController < ApplicationController
                    homework_3_deadline: homework.homework_3_deadline,
                    homework_4_deadline: homework.homework_4_deadline,
                    created_at: homework.created_at,
-                   file_id: homework.notice_file.id },
+                   file_id: homework.notice_file_ids },
            status: 200
 
   end
@@ -31,6 +34,7 @@ class ApiController < ApplicationController
              :file)
 
     return render status: 400 unless params[:file]
+
     homework = Homework.create!(homework_title: params[:homework_title],
                                 homework_description: params[:homework_description],
                                 homework_type: params[:homework_type],
@@ -44,7 +48,7 @@ class ApiController < ApplicationController
                        source: upload_file(File.open(params[:file]),
                                      "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}"))
 
-    return render status: 201
+    render status: 201
 
   end
 end

@@ -182,10 +182,10 @@ class FileController < ApplicationController
   def showExcel
     requires(homework_id: Integer)
 
-    path = Homework.find_by_id(params[:homework_id]).excel_file.source
+    file = Homework.find_by_id(params[:homework_id]).excel_file
 
-    if path
-      send_file(path)
+    if file
+      send_file(file.source)
     else
       return render status: 404
     end

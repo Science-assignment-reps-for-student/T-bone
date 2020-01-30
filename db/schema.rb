@@ -32,14 +32,14 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
   end
 
   create_table "homeworks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.bigint "homework_1_deadline", null: false
-    t.bigint "homework_2_deadline", null: false
-    t.bigint "homework_3_deadline", null: false
-    t.bigint "homework_4_deadline", null: false
+    t.integer "homework_1_deadline", null: false
+    t.integer "homework_2_deadline", null: false
+    t.integer "homework_3_deadline", null: false
+    t.integer "homework_4_deadline", null: false
     t.string "homework_title", null: false
     t.string "homework_description", null: false
     t.integer "homework_type", null: false
-    t.bigint "created_at", null: false
+    t.integer "created_at", null: false
   end
 
   create_table "members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
