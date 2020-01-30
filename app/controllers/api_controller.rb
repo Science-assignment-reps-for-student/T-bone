@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required
+  before_action :jwt_required, except: %i[create_user auth]
 
   def show
     requires(:homework_id)
