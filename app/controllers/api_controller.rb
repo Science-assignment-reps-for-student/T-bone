@@ -70,10 +70,10 @@ class ApiController < ApplicationController
 
   def create_user
     requires(:user_email,
-             user_pw,
-             user_number,
-             user_name,
-             user_type)
+             :user_pw,
+             :user_number,
+             :user_name,
+             :user_type)
 
     User.create!(user_email: params[:user_email],
                  user_pw: params[:user_pw],
