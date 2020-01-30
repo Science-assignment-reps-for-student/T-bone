@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   protected
   require 'jwt_base'
-  @@jwt_base = JWTBase::JWTBase.new(ENV['SECRET_KEY_BASE'], 15.minutes, 2.weeks)
+  @@jwt_base = JWTBase::JWTBase.new(ENV['SECRET_KEY_BASE'], 1.days, 2.weeks)
 
   def jwt_required
     begin

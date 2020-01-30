@@ -11,8 +11,6 @@ Rails.application.routes.draw do
   #APIS
   get '/homework/:homework_id', to: 'api#show'
   post '/homework', to: 'api#create'
-  get '/', to: 'api#fun'
-
-  #Socket
-  mount ActionCable.server => '/cable'
+  post '/auth', to: 'api#auth'
+  post '/user', to: 'api#create_user'
 end
