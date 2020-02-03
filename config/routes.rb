@@ -13,4 +13,7 @@ Rails.application.routes.draw do
   post '/homework', to: 'api#create'
   post '/auth', to: 'api#auth'
   post '/user', to: 'api#create_user'
+
+  #TEST
+  get '/', to: 'api#fun'
 end

@@ -100,6 +100,10 @@ class FileController < ApplicationController
                                                     source: upload_file(file, path))
       end
 
+      MailMailer.submission(user.user_email, homework.homework_title).deliver_later
+
+      render status: 201
+
     end
 
     late?(class_num, temp_homework)

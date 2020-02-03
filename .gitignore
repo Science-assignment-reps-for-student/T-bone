@@ -22,6 +22,8 @@
 !/storage/notice_file
 !/storage/single_file
 
+/shared
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 dump.rdb

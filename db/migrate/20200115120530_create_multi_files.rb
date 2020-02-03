@@ -5,7 +5,7 @@ class CreateMultiFiles < ActiveRecord::Migration[6.0]
       t.references :team, index: true
       t.references :homework, index: true
       t.string :source, null: false
-      t.integer :created_at, null: false
+      t.timestamp :created_at, null: false
     end
   end
 end

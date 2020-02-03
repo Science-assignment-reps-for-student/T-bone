@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required, except: %i[create_user auth]
+  before_action :jwt_required, except: %i[create_user auth fun]
 
   def show
     requires(:homework_id)
@@ -32,6 +32,8 @@ class ApiController < ApplicationController
              :homework_3_deadline,
              :homework_4_deadline,
              :file)
+
+    return render status: 400 unless [0,1,2].include?(params[:homework_type])
 
     return render status: 400 unless params[:file]
 
