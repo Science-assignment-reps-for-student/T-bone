@@ -30,14 +30,16 @@ class ApiController < ApplicationController
              :homework_1_deadline,
              :homework_2_deadline,
              :homework_3_deadline,
-             :homework_4_deadline,
-             :file)
+             :homework_4_deadline)
 
-    return render status: 400 unless [0, 1, 2].include?(params[:homework_type])
+    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
+    user = User.find_by_id(payload['user_id'])
+
+    return render status: 400 unless [0, 1, 2].include?(params[:homework_type].to_i)
 
     homework = Homework.create!(homework_title: params[:homework_title],
                                 homework_description: params[:homework_description],
-                                homework_type: params[:homework_type],
+                                homework_type: params[:homework_type].to_i,
                                 homework_1_deadline: params[:homework_1_deadline],
                                 homework_2_deadline: params[:homework_2_deadline],
                                 homework_3_deadline: params[:homework_3_deadline],

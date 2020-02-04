@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   has_one :code
-  has_many :homework
   has_many :teams
   has_many :single_files
   has_many :chats

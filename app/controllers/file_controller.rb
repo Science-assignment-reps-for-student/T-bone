@@ -4,7 +4,7 @@ class FileController < ApplicationController
   def showOne
     requires(homework_type: Integer, file_id: Integer)
 
-    payload = @@jwt_base.get_jwt_payload(request.authorization)
+    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
 
     render status: 400 unless [0, 1, 2].include?(params[:homework_type])
 
@@ -29,7 +29,7 @@ class FileController < ApplicationController
   def showMany
     requires(homework_id: Integer)
 
-    payload = @@jwt_base.get_jwt_payload(request.authorization)
+    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
 
     homework = Homework.find_by_id(params[:homework_id])
 
@@ -53,7 +53,7 @@ class FileController < ApplicationController
     requires(:file, homework_id: Integer)
     return render status: 415 if File.extname(params[:file]) != '.hwp'
 
-    payload = @@jwt_base.get_jwt_payload(request.authorization)
+    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
     homework = Homework.find_by_id(params[:homework_id])
     user = User.find_by_id(payload['user_id'])
     class_num = User.find_by_id(payload['user_id']).user_number / 100 - 10
@@ -114,7 +114,7 @@ class FileController < ApplicationController
   def createExcel
     requires(homework_id: Integer)
 
-    payload = @@jwt_base.get_jwt_payload(request.authorization)
+    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
 
     return render status: 403 if User.find_by_id(payload['user_id']).user_type < 1
 
