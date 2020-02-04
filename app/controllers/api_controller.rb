@@ -88,5 +88,6 @@ class ApiController < ApplicationController
 
   def fun
     send_file( "/home/ubuntu/scarfs/storage/notice_file/2/[양식]제목.pages")
+    render json: 'fine?'
   end
 end
