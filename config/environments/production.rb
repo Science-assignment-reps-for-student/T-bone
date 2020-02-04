@@ -103,7 +103,7 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   #
-  config.action_cable.url = "ws://#{ENV['ROOT']}:3000/cable"
+  config.action_cable.url = 'ws://0.0.0.0:3000/cable'
   config.action_cable.disable_request_forgery_protection = true
 
   config.action_mailer.delivery_method = :mailgun
