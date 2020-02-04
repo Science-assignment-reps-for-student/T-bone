@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   post '/homework', to: 'api#create'
   post '/auth', to: 'api#auth'
   post '/user', to: 'api#create_user'
-  get '/', to: 'api#fun'
 
   # Sockets
   mount ActionCable.server, at: '/cable'
