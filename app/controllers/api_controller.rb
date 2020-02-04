@@ -46,9 +46,10 @@ class ApiController < ApplicationController
                                 homework_4_deadline: params[:homework_4_deadline],
                                 created_at: Time.now)
 
+    FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
     NoticeFile.create!(homework_id: homework.id,
                        source: upload_file(File.open(params[:file]),
-                                     "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+                                           "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
 
     render status: 201
 

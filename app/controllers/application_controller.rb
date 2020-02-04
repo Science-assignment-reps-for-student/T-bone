@@ -32,7 +32,6 @@ class ApplicationController < ActionController::API
   end
 
   def upload_file(file, path)
-    FileUtils.mkdir_p(path)
     File.rename(file, path)
 
     path
