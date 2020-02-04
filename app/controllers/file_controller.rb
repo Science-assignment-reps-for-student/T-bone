@@ -203,16 +203,16 @@ class FileController < ApplicationController
     case class_num
 
     when 1
-      homework.late = true if homework.homework_1_deadline < Time.now.to_i
+      homework.late = true if homework.homework_1_deadline < Time.now
     when 2
-      homework.late = true if homework.homework_2_deadline < Time.now.to_i
+      homework.late = true if homework.homework_2_deadline < Time.now
     when 3
-      homework.late = true if homework.homework_3_deadline < Time.now.to_i
+      homework.late = true if homework.homework_3_deadline < Time.now
     when 4
-      homework.late = true if homework.homework_4_deadline < Time.now.to_i
+      homework.late = true if homework.homework_4_deadline < Time.now
     end
 
-    homework.created_at = Time.now.to_i
+    homework.created_at = Time.now
     homework.save
   end
 

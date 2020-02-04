@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required, except: %i[create_user auth fun]
+  before_action :jwt_required, except: %i[create_user auth]
 
   def show
     requires(:homework_id)
@@ -33,9 +33,7 @@ class ApiController < ApplicationController
              :homework_4_deadline,
              :file)
 
-    return render status: 400 unless [0,1,2].include?(params[:homework_type])
-
-    return render status: 400 unless params[:file]
+    return render status: 400 unless [0, 1, 2].include?(params[:homework_type])
 
     homework = Homework.create!(homework_title: params[:homework_title],
                                 homework_description: params[:homework_description],
@@ -44,7 +42,7 @@ class ApiController < ApplicationController
                                 homework_2_deadline: params[:homework_2_deadline],
                                 homework_3_deadline: params[:homework_3_deadline],
                                 homework_4_deadline: params[:homework_4_deadline],
-                                created_at: Time.now.to_i)
+                                created_at: Time.now)
 
     NoticeFile.create!(homework_id: homework.id,
                        source: upload_file(File.open(params[:file]),
