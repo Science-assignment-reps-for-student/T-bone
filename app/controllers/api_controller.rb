@@ -32,9 +32,6 @@ class ApiController < ApplicationController
              :homework_3_deadline,
              :homework_4_deadline)
 
-    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
-    user = User.find_by_id(payload['user_id'])
-
     return render status: 400 unless [0, 1, 2].include?(params[:homework_type].to_i)
 
     homework = Homework.create!(homework_title: params[:homework_title],
@@ -47,9 +44,8 @@ class ApiController < ApplicationController
                                 created_at: Time.now)
 
     FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-    NoticeFile.create!(homework_id: homework.id,
-                       source: upload_file(File.open(params[:file]),
-                                           "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+    homework.notice_files.create!(homesource: upload_file(File.open(params[:file]),
+                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
 
     render status: 201
 
