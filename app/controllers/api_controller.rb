@@ -48,7 +48,7 @@ class ApiController < ApplicationController
 
     NoticeFile.create!(homework_id: homework.id,
                        source: upload_file(File.open(params[:file]),
-                                     "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}"))
+                                     "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
 
     render status: 201
 
