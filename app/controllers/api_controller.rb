@@ -43,9 +43,13 @@ class ApiController < ApplicationController
                                 homework_4_deadline: Time.at(params[:homework_1_deadline].to_i),
                                 created_at: Time.now)
 
-    FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-    homework.notice_files.create!(source: upload_file(File.open(params[:file]),
-                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+    if params[:file]
+      FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+      homework.notice_files.create!(source: upload_file(File.open(params[:file]),
+                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+
+    end
+
     render status: 201
 
   end
@@ -80,5 +84,9 @@ class ApiController < ApplicationController
                  user_type: params[:user_type])
 
     render status: 201
+  end
+
+  def fun
+    send_file( "/home/ubuntu/scarfs/storage/notice_file/2/[양식]제목.pages")
   end
 end
