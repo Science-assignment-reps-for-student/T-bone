@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.string "chat_message", null: false
-    t.bigint "created_at", null: false
+    t.datetime "created_at", null: false
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
@@ -32,14 +32,14 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
   end
 
   create_table "homeworks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "homework_1_deadline", null: false
-    t.integer "homework_2_deadline", null: false
-    t.integer "homework_3_deadline", null: false
-    t.integer "homework_4_deadline", null: false
+    t.datetime "homework_1_deadline", null: false
+    t.datetime "homework_2_deadline", null: false
+    t.datetime "homework_3_deadline", null: false
+    t.datetime "homework_4_deadline", null: false
     t.string "homework_title", null: false
     t.string "homework_description", null: false
     t.integer "homework_type", null: false
-    t.integer "created_at", null: false
+    t.datetime "created_at", null: false
   end
 
   create_table "members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
     t.bigint "team_id"
     t.bigint "homework_id"
     t.string "source", null: false
-    t.integer "created_at", null: false
+    t.datetime "created_at", null: false
     t.index ["homework_id"], name: "index_multi_files_on_homework_id"
     t.index ["team_id"], name: "index_multi_files_on_team_id"
   end
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
     t.bigint "user_id"
     t.bigint "homework_id"
     t.string "source", null: false
-    t.bigint "created_at", null: false
+    t.datetime "created_at", null: false
     t.boolean "late", default: false
     t.index ["homework_id"], name: "index_single_files_on_homework_id"
     t.index ["user_id"], name: "index_single_files_on_user_id"

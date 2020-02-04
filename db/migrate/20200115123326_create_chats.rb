@@ -4,7 +4,7 @@ class CreateChats < ActiveRecord::Migration[6.0]
 
       t.references :user, index: true
       t.string :chat_message, null: false
-      t.timestamp :created_at, null: false
+      t.datetime :created_at, null: false
     end
   end
 end

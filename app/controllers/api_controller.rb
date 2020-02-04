@@ -40,10 +40,10 @@ class ApiController < ApplicationController
     homework = Homework.create!(homework_title: params[:homework_title],
                                 homework_description: params[:homework_description],
                                 homework_type: params[:homework_type].to_i,
-                                homework_1_deadline: params[:homework_1_deadline],
-                                homework_2_deadline: params[:homework_2_deadline],
-                                homework_3_deadline: params[:homework_3_deadline],
-                                homework_4_deadline: params[:homework_4_deadline],
+                                homework_1_deadline: Time.at(params[:homework_1_deadline], '%s'),
+                                homework_2_deadline: Time.at(params[:homework_1_deadline], '%s'),
+                                homework_3_deadline: Time.at(params[:homework_1_deadline], '%s'),
+                                homework_4_deadline: Time.at(params[:homework_1_deadline], '%s'),
                                 created_at: Time.now)
 
     FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
