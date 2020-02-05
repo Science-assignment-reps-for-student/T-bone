@@ -3,6 +3,7 @@ class CreateExcelFiles < ActiveRecord::Migration[6.0]
     create_table :excel_files do |t|
 
       t.references :homework, index: true
+      t.string :file_name, null: false
       t.string :source, null: false
     end
   end

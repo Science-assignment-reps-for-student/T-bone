@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
 
   create_table "excel_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "homework_id"
+    t.string "file_name", null: false
     t.string "source", null: false
     t.index ["homework_id"], name: "index_excel_files_on_homework_id"
   end
@@ -52,6 +53,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
   create_table "multi_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "team_id"
     t.bigint "homework_id"
+    t.string "file_name", null: false
     t.string "source", null: false
     t.datetime "created_at", null: false
     t.index ["homework_id"], name: "index_multi_files_on_homework_id"
@@ -74,6 +76,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
 
   create_table "notice_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "homework_id"
+    t.string "file_name", null: false
     t.string "source", null: false
     t.index ["homework_id"], name: "index_notice_files_on_homework_id"
   end
@@ -94,6 +97,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_101121) do
   create_table "single_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "homework_id"
+    t.string "file_name", null: false
     t.string "source", null: false
     t.datetime "created_at", null: false
     t.boolean "late", default: false

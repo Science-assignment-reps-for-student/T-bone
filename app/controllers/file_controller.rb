@@ -23,7 +23,8 @@ class FileController < ApplicationController
     return render status: 404 unless file
 
     send_file(file.source)
-    render status: 200
+    render json: { file_name: file.file_name },
+           status: 200
   end
 
   def showMany
@@ -69,8 +70,10 @@ class FileController < ApplicationController
 
       if homework.homework_type.zero?
         path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/[개인][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.hwp"
+        file_name = "[개인][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.hwp"
       else
         path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/[실험][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.hwp"
+        file_name = "[실험][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.hwp"
       end
 
       if SingleFile.find_by_user_id(payload['user_id'])
@@ -80,7 +83,8 @@ class FileController < ApplicationController
         temp_homework = homework
       else
         temp_homework = homework.single_files.create(user_id: payload['user_id'],
-                                                     source: upload_file(file, path))
+                                                     source: upload_file(file, path),
+                                                     file_name: file_name)
       end
 
     when 1
@@ -97,7 +101,8 @@ class FileController < ApplicationController
         temp_homework = homework
       else
         temp_homework = homework.multi_files.create(user_id: payload['user_id'],
-                                                    source: upload_file(file, path))
+                                                    source: upload_file(file, path),
+                                                    file_name: "[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp")
       end
 
       MailMailer.submission(user.user_email, homework.homework_title).deliver_later
@@ -177,7 +182,8 @@ class FileController < ApplicationController
     path = "#{ENV['EXCEL_FILE_PATH']}/[자기/상호평가]#{homework.homework_title}.xls"
 
     book.write(path)
-    homework.excel_file.create!(source: path)
+    homework.excel_file.create!(source: path,
+                                file_name: "[자기/상호평가]#{homework.homework_title}.xls")
 
     render status: 201
 
@@ -190,6 +196,7 @@ class FileController < ApplicationController
 
     if file
       send_file(file.source)
+      render json: { file_name: file.file_name }
     else
       return render status: 404
     end
