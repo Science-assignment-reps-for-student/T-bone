@@ -33,7 +33,7 @@ class ApiController < ApplicationController
     return render status: 400 unless [0, 1, 2].include?(params[:homework_type].to_i)
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
-    return render status: 403 unless User.find_by_id(payload['user_id']).user_type < 1
+    return render status: 403 if User.find_by_id(payload['user_id']).user_type < 1
 
     homework = Homework.create!(homework_title: params[:homework_title],
                                 homework_description: params[:homework_description],
