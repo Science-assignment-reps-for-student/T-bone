@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   post '/user', to: 'api#create_user'
 
   # Test
-  get '/', to: 'api#fun'
+  post '/', to: 'api#fun'
 
   # Sockets
   mount ActionCable.server, at: '/cable'
