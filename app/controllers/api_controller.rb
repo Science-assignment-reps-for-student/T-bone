@@ -48,11 +48,13 @@ class ApiController < ApplicationController
                                 homework_4_deadline: Time.at(params[:homework_1_deadline].to_i),
                                 created_at: Time.now)
 
-    params[:file]&.each do |file|
-      FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-      homework.notice_files.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(file)}",
-                                    source: upload_file(File.open(file),
-                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+    unless params[:file].blank?
+      params[:file].each do |file|
+        FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+        homework.notice_files.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(file)}",
+                                      source: upload_file(File.open(file),
+                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(file)}"))
+      end
     end
 
     render status: 201
