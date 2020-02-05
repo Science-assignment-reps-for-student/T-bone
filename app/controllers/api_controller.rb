@@ -51,7 +51,7 @@ class ApiController < ApplicationController
     unless params[:file].blank?
       params[:file].each do |file|
         FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-        homework.notice_files.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(file)}",
+        homework.notice_files.create!(file_name: file.original_filename,
                                       source: upload_file(File.open(file),
                                                           "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
       end
