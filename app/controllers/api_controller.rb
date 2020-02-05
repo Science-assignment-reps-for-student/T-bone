@@ -89,6 +89,11 @@ class ApiController < ApplicationController
   end
 
   def fun
-    render json: params
+    temp = []
+    params[:file].each do |file|
+      temp.append file
+    end
+
+    render json: temp
   end
 end
