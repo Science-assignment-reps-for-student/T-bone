@@ -46,9 +46,9 @@ class ApiController < ApplicationController
 
     if params[:file]
       FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-      homework.notice_files.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(params[:file])}",
-                                    source: upload_file(File.open(params[:file]),
-                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+      homework.notice_file.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(params[:file])}",
+                                   source: upload_file(File.open(params[:file]),
+                                                       "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
 
     end
 
