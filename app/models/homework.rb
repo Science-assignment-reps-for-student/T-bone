@@ -1,6 +1,6 @@
 class Homework < ApplicationRecord
   has_many :teams
-  has_one :notice_file
+  has_many :notice_files
   has_many :single_files
   has_many :multi_files
   has_one :excel_file

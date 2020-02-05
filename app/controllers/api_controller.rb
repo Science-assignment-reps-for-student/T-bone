@@ -6,7 +6,11 @@ class ApiController < ApplicationController
     homework = Homework.find_by_id(params[:homework_id])
     return render status: 404 unless homework
 
-    homework.notice_file.source
+    file_name = []
+    homework.notice_files.each do |file|
+      send_file(file.source)
+      file_name.append(file.file_name)
+    end
 
     render json: { homework_title: homework.homework_title,
                    homework_description: homework.homework_description,
@@ -16,7 +20,7 @@ class ApiController < ApplicationController
                    homework_3_deadline: homework.homework_3_deadline,
                    homework_4_deadline: homework.homework_4_deadline,
                    created_at: homework.created_at,
-                   file_name: homework.notice_file.file_name },
+                   file_name: file_name },
            status: 200
 
   end
@@ -46,10 +50,9 @@ class ApiController < ApplicationController
 
     params[:file]&.each do |file|
       FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-      NoticeFile.create!(homework_id: homework.id,
-                         file_name: "[양식]#{homework.homework_title}#{File.extname(file)}",
-                         source: upload_file(File.open(file),
-                                             "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
+      homework.notice_files.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(file)}",
+                                    source: upload_file(File.open(file),
+                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/[양식]#{homework.homework_title}#{File.extname(params[:file])}"))
     end
 
     render status: 201
@@ -89,11 +92,6 @@ class ApiController < ApplicationController
   end
 
   def fun
-    temp = []
-    params[:file].each do |file|
-      temp.append file
-    end
-
-    render json: temp
+    render json: params
   end
 end
