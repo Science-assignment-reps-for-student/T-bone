@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required, except: %i[create_user auth]
+  before_action :jwt_required, except: %i[create_user auth fun]
 
   def show
     requires(:homework_id)
@@ -87,5 +87,9 @@ class ApiController < ApplicationController
                  user_type: params[:user_type])
 
     render status: 201
+  end
+
+  def fun
+    send_file('/home/ubuntu/scarfs/storage/notice_file/2/[양식]제목.pages')
   end
 end
