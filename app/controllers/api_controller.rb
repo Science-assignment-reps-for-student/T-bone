@@ -53,7 +53,7 @@ class ApiController < ApplicationController
         FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
         homework.notice_files.create!(file_name: "[양식]#{homework.homework_title}#{File.extname(file)}",
                                       source: upload_file(File.open(file),
-                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file['original_filename']}"))
+                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
       end
     end
 
