@@ -6,7 +6,7 @@ class ApiController < ApplicationController
     homework = Homework.find_by_id(params[:homework_id])
     return render status: 404 unless homework
 
-    send_file(homework.notice_file.source)
+    homework.notice_file.source
 
     render json: { homework_title: homework.homework_title,
                    homework_description: homework.homework_description,
