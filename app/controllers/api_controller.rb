@@ -100,12 +100,14 @@ class ApiController < ApplicationController
     homework.homework_title = params[:homework_title]
     homework.homework_description = params[:homework_description]
     homework.homework_type = params[:homework_type]
-    homework.homework_1_deadline = params[:homework_1_deadline]
-    homework.homework_2_deadline = params[:homework_2_deadline]
-    homework.homework_3_deadline = params[:homework_3_deadline]
-    homework.homework_4_deadline = params[:homework_4_deadline]
+    homework.homework_1_deadline = Time.at(params[:homework_1_deadline].to_i)
+    homework.homework_2_deadline = Time.at(params[:homework_2_deadline].to_i)
+    homework.homework_3_deadline = Time.at(params[:homework_3_deadline].to_i)
+    homework.homework_4_deadline = Time.at(params[:homework_4_deadline].to_i)
 
     homework.notice_files.destroy_all
+
+    homework.save
 
     FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
 
@@ -117,7 +119,6 @@ class ApiController < ApplicationController
                                                           "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
       end
     end
-
 
     render status: 200
   end
