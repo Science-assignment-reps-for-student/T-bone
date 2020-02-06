@@ -8,23 +8,21 @@ class FileController < ApplicationController
 
     render status: 400 unless [0, 1, 2].include?(params[:homework_type])
 
+    file = MultiFile.find_by_id(params[:file_id])
+    return render status: 404 unless file
+
     case params[:homework_type]
 
     when 0, 2
-      file = SingleFile.find_by_id(params[:file_id])
-      return render status: 403 unless file.user.id == payload['user_id']
+      return render status: 403 if !file.user.id == payload['user_id'] &&
+                                   User.find_by_id(payload['user_id']).user_type < 1
 
     when 1
-      file = MultiFile.find_by_id(params[:file_id])
       return render status: 403 if !file.team.member_ids.include?(payload['user_id']) &&
                                    User.find_by_id(payload['user_id']).user_type < 1
     end
 
-    return render status: 404 unless file
-
     send_file(file.source)
-    render json: { file_name: file.file_name },
-           status: 200
   end
 
   def showMany
@@ -34,31 +32,50 @@ class FileController < ApplicationController
 
     homework = Homework.find_by_id(params[:homework_id])
 
+    if User.find_by_id(payload['user_id']).user_type < 1
+      return render status: 403
+    end
+
     case homework.homework_type
 
     when 0, 2
-      homework_list = SingleFile.where(homework_id: params[:homework_id]).ids
+      homework_list = []
+      SingleFile.where(homework_id: homework.id).each do |file|
+        homework_list.append(file_name: file.file_name,
+                             file_id: file.id)
+      end
 
     when 1
-      homework_list = MultiFile.where(homework_id: params[:homework_id]).ids
-
+      homework_list = []
+      MultiFile.where(homework_id: homework.id).each do |file|
+        homework_list.append(file_name: file.file_name,
+                             file_id: file.id)
+      end
     end
 
-    return render status: 403 if User.find_by_id(payload['user_id']).user_type < 1
     return render status: 404 if homework_list.blank?
 
-    render json: homework_list, status: 200
+    render json: homework_list,
+           status: 200
   end
 
   def create
     requires(:file, homework_id: Integer)
-    return render status: 415 if File.extname(params[:file]) != '.hwp'
+    return render status: 400 if params[:file].blank?
+
+    params[:file].each do |file|
+      return render status: 415 if File.extname(file) != '.hwp'
+    end
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
     homework = Homework.find_by_id(params[:homework_id])
     user = User.find_by_id(payload['user_id'])
     class_num = User.find_by_id(payload['user_id']).user_number / 100 - 10
-    file = File.open(params[:file])
+
+    files = []
+    params[:file].each do |doc|
+      files.append(File.open(doc))
+    end
 
     return render status: 404 unless homework
 
@@ -76,15 +93,25 @@ class FileController < ApplicationController
         file_name = "[실험][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.hwp"
       end
 
-      if SingleFile.find_by_user_id(payload['user_id'])
-        File.delete(homework.single_files.find_by_user_id(payload['user_id']).source)
-        homework.single_files.find_by_user_id(payload['user_id']).source = upload_file(file, path)
+      submit_file = homework.single_files.find_by_user_id(user.id)
 
-        temp_homework = homework
+      if submit_file
+        homework.single_files.each do |file|
+          File.delete(file.source)
+        end
+
+        files.each do |file|
+          submit_file.source = upload_file(file, path)
+        end
+
       else
-        temp_homework = homework.single_files.create(user_id: payload['user_id'],
-                                                     source: upload_file(file, path),
-                                                     file_name: file_name)
+        homework.single_files.each do |file|
+          created_file = file.create(user_id: payload['user_id'],
+                                     source: upload_file(file, path),
+                                     file_name: file_name)
+
+          late?(class_num, created_file, homework)
+        end
       end
 
     when 1
@@ -93,25 +120,41 @@ class FileController < ApplicationController
 
       team = Team.find_by_leader_id_and_homework_id(payload['user_id'], homework.id)
       path = "ENV['SINGLE_FILE_PATH']/#{homework.id}/[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp"
+      file_name = "[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp"
 
-      if homework.multi_files.find_by_team_id(team.id)
-        File.delete(homework.multi_files.find_by_team_id(team.id).source)
-        homework.multi_files.find_by_team_id(team.id).source = upload_file(file, path)
-
-        temp_homework = homework
-      else
-        temp_homework = homework.multi_files.create(user_id: payload['user_id'],
-                                                    source: upload_file(file, path),
-                                                    file_name: "[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp")
+      team_id = homework.teams.each do |team|
+        return team.id if team.member_ids.include?(user.id)
       end
 
-      MailMailer.submission(user.user_email, homework.homework_title).deliver_later
+      submit_file = homework.multi_files.find_by_team_id(team_id)
 
-      render status: 201
+      if submit_file
+        homework.single_files.each do |file|
+          File.delete(file.source)
+        end
 
+        params[:file].each do |file|
+          submit_file.source = upload_file(file, path)
+        end
+
+        file = submit_file
+      else
+
+        params[:file].each do |file|
+          created_file = file.create(user_id: payload['user_id'],
+                                     source: upload_file(file, path),
+                                     file_name: file_name)
+
+          late?(class_num, created_file, homework)
+        end
+      end
     end
 
-    late?(class_num, temp_homework)
+    late?(class_num, file, homework)
+
+    MailMailer.submission(user.user_email,
+                          homework.homework_title,
+                          file.late).deliver_later
 
     render status: 201
   end
@@ -121,7 +164,9 @@ class FileController < ApplicationController
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
 
-    return render status: 403 if User.find_by_id(payload['user_id']).user_type < 1
+    if User.find_by_id(payload['user_id']).user_type < 1
+      return render status: 403
+    end
 
     homework = Homework.find_by_id(params[:homework_id])
 
@@ -150,12 +195,12 @@ class FileController < ApplicationController
     User.where(user_type: 0).order(user_number: :desc).each do |user|
       class_number = user.user_number % 100 - 10
       user_team = user.teams.find_by_homework_id(params[:homework_id])
-      self_evaluation = user.self_evaluation
+      self_evaluation = user.self_evaluations.find_by_homework_id(params[:homework_id])
 
       communication = 0
       cooperation = 0
 
-      MutualEvaluation.where(target_id: payload['user_id'], homework_id: params[:homework_id]).each do |evaluation|
+      MutualEvaluation.where(target_id: user.id, homework_id: params[:homework_id]).each do |evaluation|
         communication += evaluation.communication
         cooperation += evaluation.cooperation
       end
@@ -196,31 +241,28 @@ class FileController < ApplicationController
 
     if file
       send_file(file.source)
-      render json: { file_name: file.file_name }
     else
-      return render status: 404
+      render status: 404
     end
-
-    render status: 200
   end
 
   private
 
-  def late?(class_num, homework)
+  def late?(class_num, file, homework)
     case class_num
 
     when 1
-      homework.late = true if homework.homework_1_deadline < Time.now
+      file.late = true if homework.homework_1_deadline < Time.now
     when 2
-      homework.late = true if homework.homework_2_deadline < Time.now
+      file.late = true if homework.homework_2_deadline < Time.now
     when 3
-      homework.late = true if homework.homework_3_deadline < Time.now
+      file.late = true if homework.homework_3_deadline < Time.now
     when 4
-      homework.late = true if homework.homework_4_deadline < Time.now
+      file.late = true if homework.homework_4_deadline < Time.now
     end
 
-    homework.created_at = Time.now
-    homework.save
+    file.created_at = Time.now
+    file.save
   end
 
 end
