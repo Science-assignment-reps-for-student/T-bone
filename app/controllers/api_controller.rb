@@ -6,12 +6,6 @@ class ApiController < ApplicationController
     homework = Homework.find_by_id(params[:homework_id])
     return render status: 404 unless homework
 
-    file_name = []
-    homework.notice_files.each do |file|
-      send_file(file.source)
-      file_name.append(file.file_name)
-    end
-
     render json: { homework_title: homework.homework_title,
                    homework_description: homework.homework_description,
                    homework_type: homework.homework_type,
@@ -20,9 +14,17 @@ class ApiController < ApplicationController
                    homework_3_deadline: homework.homework_3_deadline,
                    homework_4_deadline: homework.homework_4_deadline,
                    created_at: homework.created_at,
-                   file_name: file_name },
+                   file_id: homework.notice_file_ids },
            status: 200
+  end
 
+  def show_notice_file
+    requires(:file_id)
+    file = NoticeFile.find_by_id(params[:file_id])
+    return render status: 404 unless file
+
+    send_file(file.source)
+    render status: 204
   end
 
   def create
