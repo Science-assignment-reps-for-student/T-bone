@@ -25,7 +25,7 @@ class ApiController < ApplicationController
                    homework_3_deadline: homework.homework_3_deadline,
                    homework_4_deadline: homework.homework_4_deadline,
                    created_at: homework.created_at,
-                   file_id: file_infos },
+                   file_info: file_infos },
            status: 200
   end
 
