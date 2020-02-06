@@ -10,19 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_17_101121) do
+ActiveRecord::Schema.define(version: 2020_02_06_104641) do
+
+  create_table "auth_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "auth_code", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_auth_codes_on_user_id"
+  end
 
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.string "chat_message", null: false
     t.datetime "created_at", null: false
     t.index ["user_id"], name: "index_chats_on_user_id"
-  end
-
-  create_table "codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "auth_code", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_codes_on_user_id"
   end
 
   create_table "excel_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

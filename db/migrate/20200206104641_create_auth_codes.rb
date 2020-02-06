@@ -1,4 +1,4 @@
-class CreateCodes < ActiveRecord::Migration[6.0]
+class CreateAuthCodes < ActiveRecord::Migration[6.0]
   def change
     create_table :auth_codes do |t|
 
