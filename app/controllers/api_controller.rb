@@ -24,7 +24,6 @@ class ApiController < ApplicationController
     return render status: 404 unless file
 
     send_file(file.source)
-    render status: 204
   end
 
   def create
