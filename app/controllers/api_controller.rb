@@ -61,11 +61,13 @@ class ApiController < ApplicationController
                                 homework_4_deadline: Time.at(params[:homework_1_deadline].to_i),
                                 created_at: Time.now)
 
-    params[:file]&.each do |file|
-      FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-      homework.notice_files.create!(file_name: file.original_filename,
-                                    source: upload_file(File.open(file),
-                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
+    unless params[:file].blank?
+      params[:file].each do |file|
+        FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+        homework.notice_files.create!(file_name: file.original_filename,
+                                      source: upload_file(File.open(file),
+                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
+      end
     end
 
     render status: 201
@@ -97,12 +99,15 @@ class ApiController < ApplicationController
       FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
     end
 
-    params[:file]&.each do |file|
-      FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-      homework.notice_files.create!(file_name: file.original_filename,
-                                    source: upload_file(File.open(file),
-                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
+    unless params[:file].blank?
+      params[:file].each do |file|
+        FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+        homework.notice_files.create!(file_name: file.original_filename,
+                                      source: upload_file(File.open(file),
+                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
+      end
     end
+
 
     render status: 200
   end
