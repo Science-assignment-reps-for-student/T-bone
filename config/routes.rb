@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   # APIS
   get '/homework/:homework_id', to: 'api#show'
+  patch '/homework/:homework_id', to: 'api#update'
   get '/homework/notice-file/:file_id', to: 'api#show_notice_file'
   post '/homework', to: 'api#create'
   post '/auth', to: 'api#auth'

@@ -46,10 +46,14 @@ class ApiController < ApplicationController
              :homework_3_deadline,
              :homework_4_deadline)
 
-    return render status: 400 unless [0, 1, 2].include?(params[:homework_type].to_i)
+    unless [0, 1, 2].include?(params[:homework_type].to_i)
+      return render status: 400
+    end
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
-    return render status: 403 if User.find_by_id(payload['user_id']).user_type < 1
+    if User.find_by_id(payload['user_id']).user_type < 1
+      return render status: 403
+    end
 
     homework = Homework.create!(homework_title: params[:homework_title],
                                 homework_description: params[:homework_description],
@@ -60,17 +64,49 @@ class ApiController < ApplicationController
                                 homework_4_deadline: Time.at(params[:homework_1_deadline].to_i),
                                 created_at: Time.now)
 
-    unless params[:file].blank?
-      params[:file].each do |file|
-        FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-        homework.notice_files.create!(file_name: file.original_filename,
-                                      source: upload_file(File.open(file),
-                                                          "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
-      end
+    params[:file]&.each do |file|
+      FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+      homework.notice_files.create!(file_name: file.original_filename,
+                                    source: upload_file(File.open(file),
+                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
     end
 
     render status: 201
 
+  end
+
+  def update
+    requires(:homework_title,
+             :homework_description,
+             :homework_type,
+             :homework_1_deadline,
+             :homework_2_deadline,
+             :homework_3_deadline,
+             :homework_4_deadline,
+             :homework_id)
+
+    homework = Homework.find_by_id(params[:homework_id])
+
+    homework.homework_title = params[:homework_title]
+    homework.homework_description = params[:homework_description]
+    homework.homework_type = params[:homework_type]
+    homework.homework_1_deadline = params[:homework_1_deadline]
+    homework.homework_2_deadline = params[:homework_2_deadline]
+    homework.homework_3_deadline = params[:homework_3_deadline]
+    homework.homework_4_deadline = params[:homework_4_deadline]
+
+    if params[:file]
+      FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+    end
+
+    params[:file]&.each do |file|
+      FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+      homework.notice_files.create!(file_name: file.original_filename,
+                                    source: upload_file(File.open(file),
+                                                        "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
+    end
+
+    render status: 200
   end
 
   def auth
