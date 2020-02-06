@@ -74,6 +74,16 @@ class ApiController < ApplicationController
 
   end
 
+  def destroy
+    requires(:homework_id)
+
+    homework = Homework.find_by_id(params[:homework_id])
+
+    FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+
+    homework.destroy!
+  end
+
   def update
     requires(:homework_title,
              :homework_description,
@@ -95,9 +105,9 @@ class ApiController < ApplicationController
     homework.homework_3_deadline = params[:homework_3_deadline]
     homework.homework_4_deadline = params[:homework_4_deadline]
 
-    if params[:file]
-      FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-    end
+    homework.notice_files.destroy_all
+
+    FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
 
     unless params[:file].blank?
       params[:file].each do |file|
