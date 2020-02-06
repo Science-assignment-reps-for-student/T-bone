@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CodeTest < ActiveSupport::TestCase
+class AuthCodeTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
