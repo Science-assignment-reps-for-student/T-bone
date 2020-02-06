@@ -9,7 +9,8 @@ class ApiController < ApplicationController
     file_infos = []
 
     homework.notice_files.each do |file|
-      file_infos.append(file.file_name => file.id)
+      file_infos.append(file_name: file.file_name,
+                        file_id: file.id)
     end
 
 
