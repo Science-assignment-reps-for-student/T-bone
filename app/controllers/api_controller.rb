@@ -112,6 +112,8 @@ class ApiController < ApplicationController
     homework.homework_3_deadline = Time.at(params[:homework_3_deadline].to_i)
     homework.homework_4_deadline = Time.at(params[:homework_4_deadline].to_i)
 
+    homework.save
+
     unless params[:file].blank?
       homework.notice_files.destroy_all
 
@@ -124,8 +126,6 @@ class ApiController < ApplicationController
                                                           "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
       end
     end
-
-    homework.save
 
     render status: 200
   end
