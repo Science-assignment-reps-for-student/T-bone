@@ -70,6 +70,13 @@ class ApiController < ApplicationController
       end
     end
 
+    exp = Time.at([params[:homework_1_deadline],
+                   params[:homework_2_deadline],
+                   params[:homework_3_deadline],
+                   params[:homework_4_deadline]].max)
+
+    MakeExcelJob.set(wait_until: exp).perform_later()
+
     render status: 201
 
   end
@@ -105,11 +112,9 @@ class ApiController < ApplicationController
     homework.homework_3_deadline = Time.at(params[:homework_3_deadline].to_i)
     homework.homework_4_deadline = Time.at(params[:homework_4_deadline].to_i)
 
-    homework.notice_files.destroy_all
-
-    homework.save
-
     unless params[:file].blank?
+      homework.notice_files.destroy_all
+
       FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
 
       params[:file].each do |file|
@@ -119,6 +124,8 @@ class ApiController < ApplicationController
                                                           "#{ENV['NOTICE_FILE_PATH']}/#{homework.id}/#{file.original_filename}"))
       end
     end
+
+    homework.save
 
     render status: 200
   end
