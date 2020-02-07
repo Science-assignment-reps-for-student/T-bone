@@ -70,15 +70,14 @@ class ApiController < ApplicationController
       end
     end
 
-    # exp = Time.at([params[:homework_1_deadline],
-    #                params[:homework_2_deadline],
-    #                params[:homework_3_deadline],
-    #                params[:homework_4_deadline]].max)
+    # exp = Time.at([params[:homework_1_deadline].to_i,
+    #                params[:homework_2_deadline].to_i,
+    #                params[:homework_3_deadline].to_i,
+    #                params[:homework_4_deadline].to_i].max)
     #
-    # MakeExcelJob.set(wait_until: exp).perform_later()
+    # MakeExcelJob.set(wait_until: exp).perform_later(homework.id)
 
     render status: 201
-
   end
 
   def destroy

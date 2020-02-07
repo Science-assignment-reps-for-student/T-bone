@@ -52,4 +52,4 @@ development:
 #  password: <%#= ENV['T_BONE_DATABASE_PASSWORD'] %>
 production:
   <<: *default
-  database: scarfs_production
+  database: scarfs_development

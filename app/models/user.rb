@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  has_one :auth_code
   has_many :teams
   has_many :single_files
   has_many :chats

@@ -60,4 +60,21 @@ class ApplicationController < ActionController::API
     params
   end
 
+  def self.late?(class_num, file, homework)
+    case class_num
+
+    when 1
+      file.late = true if homework.homework_1_deadline < Time.now
+    when 2
+      file.late = true if homework.homework_2_deadline < Time.now
+    when 3
+      file.late = true if homework.homework_3_deadline < Time.now
+    when 4
+      file.late = true if homework.homework_4_deadline < Time.now
+    end
+
+    file.created_at = Time.now
+    file.save
+  end
+
 end
