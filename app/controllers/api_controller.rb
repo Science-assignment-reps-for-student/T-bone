@@ -112,11 +112,11 @@ class ApiController < ApplicationController
     homework.homework_3_deadline = Time.at(params[:homework_3_deadline].to_i)
     homework.homework_4_deadline = Time.at(params[:homework_4_deadline].to_i)
 
+    homework.notice_files.destroy_all unless params[:file].blank?
+
     homework.save
 
     unless params[:file].blank?
-      homework.notice_files.destroy_all
-
       FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
 
       params[:file].each do |file|
