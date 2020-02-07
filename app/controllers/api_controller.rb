@@ -121,9 +121,10 @@ class ApiController < ApplicationController
 
       params[:file].each do |file|
         FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{params[:homework_id]}")
-        homework.notice_files.create!(file_name: file.original_filename,
-                                      source: upload_file(File.open(file),
-                                                          "#{ENV['NOTICE_FILE_PATH']}/#{params[:homework_id]}/#{file.original_filename}"))
+        NoticeFile.create!(file_name: file.original_filename,
+                           homework_id: params[:homework_id],
+                           source: upload_file(File.open(file),
+                                               "#{ENV['NOTICE_FILE_PATH']}/#{params[:homework_id]}/#{file.original_filename}"))
       end
     end
 
