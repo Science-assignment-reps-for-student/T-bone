@@ -194,15 +194,18 @@ class FileController < ApplicationController
     row = 2
     User.where(user_type: 0).order(user_number: :desc).each do |user|
       class_number = user.user_number % 100 - 10
-      user_team = user.teams.find_by_homework_id(params[:homework_id])
+      team_id = homework.teams.each do |team|
+        return team.id if team.member_ids.include?(user.id)
+      end
+      user_team = Team.find_by_id(team_id)
       self_evaluation = user.self_evaluations.find_by_homework_id(params[:homework_id])
 
-      communication = 0
-      cooperation = 0
+      communication = ''
+      cooperation = ''
 
       MutualEvaluation.where(target_id: user.id, homework_id: params[:homework_id]).each do |evaluation|
-        communication += evaluation.communication
-        cooperation += evaluation.cooperation
+        communication += "#{evaluation.communication}/#{user_team.members.count * 3}"
+        cooperation += "#{evaluation.cooperation}/#{user_team.members.count * 3}"
       end
 
       if user_team.multi_file
