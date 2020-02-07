@@ -112,11 +112,9 @@ class ApiController < ApplicationController
     homework.homework_3_deadline = Time.at(params[:homework_3_deadline].to_i)
     homework.homework_4_deadline = Time.at(params[:homework_4_deadline].to_i)
 
-    homework.notice_files.destroy_all unless params[:file].blank?
-
-    homework.save
-
     unless params[:file].blank?
+      homework.notice_files.destroy_all
+
       FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{params[:homework_id]}")
 
       params[:file].each do |file|
@@ -126,7 +124,10 @@ class ApiController < ApplicationController
                            source: upload_file(File.open(file),
                                                "#{ENV['NOTICE_FILE_PATH']}/#{params[:homework_id]}/#{file.original_filename}"))
       end
+
     end
+
+    homework.save
 
     render status: 200
   end

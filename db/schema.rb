@@ -25,6 +25,12 @@ ActiveRecord::Schema.define(version: 2020_02_06_104641) do
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
+  create_table "codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "auth_code", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_codes_on_user_id"
+  end
+
   create_table "excel_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "homework_id"
     t.string "file_name", null: false
