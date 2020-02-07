@@ -109,9 +109,9 @@ class ApiController < ApplicationController
 
     homework.save
 
-    FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
-
     unless params[:file].blank?
+      FileUtils.rm_rf("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
+
       params[:file].each do |file|
         FileUtils.mkdir_p("#{ENV['NOTICE_FILE_PATH']}/#{homework.id}")
         homework.notice_files.create!(file_name: file.original_filename,
