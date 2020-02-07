@@ -3,7 +3,7 @@ class CreateAuthCodes < ActiveRecord::Migration[6.0]
     create_table :auth_codes do |t|
 
       t.string :auth_code, null: false, unique: true
-      t.references :user, index: true
+      t.integer :user_number, null: false, unique: true
     end
   end
 end

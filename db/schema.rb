@@ -15,7 +15,13 @@ ActiveRecord::Schema.define(version: 2020_02_06_104641) do
   create_table "auth_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "auth_code", null: false
     t.bigint "user_id"
+    t.integer "user_number", null: false
     t.index ["user_id"], name: "index_auth_codes_on_user_id"
+  end
+
+  create_table "auth_emails", primary_key: "auth_email", id: :string, limit: 30, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "auth_state"
+    t.string "email_code", limit: 36, null: false
   end
 
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -52,6 +58,7 @@ ActiveRecord::Schema.define(version: 2020_02_06_104641) do
   create_table "members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "team_id"
     t.bigint "user_id"
+    t.integer "uuid"
     t.index ["team_id"], name: "index_members_on_team_id"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
