@@ -45,6 +45,8 @@ class CreateFileController < ApplicationController
     homework = Homework.find_by_id(params[:homework_id])
     team = homework.teams.find_by_leader_id(user.id)
 
+    return render status: 403 unless team
+
     status = MultiFile.create_multi_file(user.id,
                                          homework.id,
                                          files,
