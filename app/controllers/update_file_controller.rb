@@ -5,10 +5,10 @@ class UpdateFileController < ApplicationController
     requires(:file, :homework_id)
     return render status: 400 if params[:file].blank?
 
-    files = []
+    files = {}
 
     params[:file].each do |file|
-      files.append(file.original_filename => File.open(file))
+      files[file.original_filename] = File.open(file)
       return render status: 415 if File.extname(file) != '.hwp'
     end
 
@@ -38,10 +38,10 @@ class UpdateFileController < ApplicationController
     requires(:file, :homework_id)
     return render status: 400 if params[:file].blank?
 
-    files = []
+    files = {}
 
     params[:file].each do |file|
-      files.append(File.open(file))
+      files[file.original_filename] = File.open(file)
       return render status: 415 if File.extname(file) != '.hwp'
     end
 
