@@ -32,7 +32,7 @@ class SingleFile < ApplicationRecord
     else
       files.each do |file_name, file|
         path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file_name}"
-        created_file = homework.multi_files.create(user_id: user.id,
+        created_file = homework.single_files.create(user_id: user.id,
                                                    source: ApplicationController.upload_file(file, path),
                                                    file_name: file_name)
 
