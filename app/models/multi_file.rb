@@ -20,7 +20,7 @@ class MultiFile < ApplicationRecord
       file_name = "[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp"
 
       created_file = homework.multi_files.create(team_id: team.id,
-                                                 source: upload_file(files[0], path),
+                                                 source: ApplicationController.upload_file(files[0], path),
                                                  file_name: file_name)
 
       ApplicationController.late?(class_num,
@@ -30,7 +30,7 @@ class MultiFile < ApplicationRecord
       files.each do |file_name, file|
         path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{file_name}.hwp"
         created_file = homework.multi_files.create(team_id: team.id,
-                                                   source: upload_file(file, path),
+                                                   source: ApplicationController.upload_file(file, path),
                                                    file_name: file_name)
 
         ApplicationController.late?(class_num,

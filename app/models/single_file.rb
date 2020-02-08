@@ -23,7 +23,7 @@ class SingleFile < ApplicationRecord
       end
 
       created_file = homework.single_files.create!(user_id: user.id,
-                                                   source: upload_file(files[0], path),
+                                                   source: ApplicationController.upload_file(files[0], path),
                                                    file_name: file_name)
 
       ApplicationController.late?(user.user_number / 100 - 10,
@@ -33,7 +33,7 @@ class SingleFile < ApplicationRecord
       files.each do |file_name, file|
         path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file_name}"
         created_file = homework.multi_files.create(user_id: user.id,
-                                                   source: upload_file(file, path),
+                                                   source: ApplicationController.upload_file(file, path),
                                                    file_name: file_name)
 
         ApplicationController.late?(user.user_number / 100 - 10,
