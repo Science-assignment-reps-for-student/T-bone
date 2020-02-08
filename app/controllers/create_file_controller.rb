@@ -25,7 +25,7 @@ class CreateFileController < ApplicationController
     MailMailer.submission(user.user_email,
                           homework.homework_title,
                           homework.homework_type,
-                          user.single_files.last.late).deliver_later
+                          homework.single_files.last.late).deliver_later
     render status: 201
   end
 
@@ -54,7 +54,7 @@ class CreateFileController < ApplicationController
     MailMailer.submission(user.user_email,
                           homework.homework_title,
                           homework.homework_type,
-                          team.multi_files.last.late).deliver_later
+                          homework.multi_files.last.late).deliver_later
     render status: 201
   end
 
