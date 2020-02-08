@@ -77,4 +77,9 @@ class ApplicationController < ActionController::API
     file.save
   end
 
+  def self.upload_file(file, path)
+    File.rename(file, path)
+
+    path
+  end
 end
