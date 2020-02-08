@@ -41,4 +41,12 @@ class ShowFileController < ApplicationController
       render status: 404
     end
   end
+
+  def show_notice
+    requires(:file_id)
+    file = NoticeFile.find_by_id(params[:file_id])
+    return render status: 404 unless file
+
+    send_file(file.source)
+  end
 end

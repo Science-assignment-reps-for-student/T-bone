@@ -26,14 +26,6 @@ class ApiController < ApplicationController
            status: 200
   end
 
-  def show_notice_file
-    requires(:file_id)
-    file = NoticeFile.find_by_id(params[:file_id])
-    return render status: 404 unless file
-
-    send_file(file.source)
-  end
-
   def create
     requires(:homework_title,
              :homework_description,
@@ -129,6 +121,28 @@ class ApiController < ApplicationController
     homework.save
 
     render status: 200
+  end
+
+  def show_files
+    requires(:homework_id)
+
+    homework = Homework.find_by_id(params[:homework_id])
+
+    file_info = []
+
+    if homework.homework_type == 1
+      homework.multi_files.each do |file|
+        file_info.append(file_name: file.file_name,
+                         file_id: file.id)
+      end
+    else
+      homework.single_files.each do |file|
+        file_info.append(file_name: file.file_name,
+                         file_id: file.id)
+      end
+    end
+
+    render json: file_info, status: 200
   end
 
   def auth
