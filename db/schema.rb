@@ -10,14 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_07_095141) do
+ActiveRecord::Schema.define(version: 2020_02_09_090911) do
 
   create_table "auth_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "auth_code", null: false
     t.integer "user_number", null: false
   end
 
-  create_table "auth_emails", primary_key: "auth_email", id: :string, limit: 30, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "auth_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "auth_email", limit: 30
     t.string "auth_state"
     t.string "email_code", limit: 36, null: false
   end
@@ -67,6 +68,7 @@ ActiveRecord::Schema.define(version: 2020_02_07_095141) do
     t.string "file_name", null: false
     t.string "source", null: false
     t.datetime "created_at", null: false
+    t.boolean "late"
     t.index ["homework_id"], name: "index_multi_files_on_homework_id"
     t.index ["team_id"], name: "index_multi_files_on_team_id"
   end
@@ -122,6 +124,7 @@ ActiveRecord::Schema.define(version: 2020_02_07_095141) do
     t.string "team_name"
     t.index ["homework_id", "team_name"], name: "index_teams_on_homework_id_and_team_name", unique: true
     t.index ["homework_id"], name: "index_teams_on_homework_id"
+    t.index ["leader_id", "homework_id"], name: "index_teams_on_leader_id_and_homework_id", unique: true
     t.index ["leader_id"], name: "index_teams_on_leader_id"
   end
 
