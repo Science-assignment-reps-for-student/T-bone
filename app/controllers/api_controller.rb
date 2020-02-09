@@ -13,7 +13,6 @@ class ApiController < ApplicationController
                         file_id: file.id)
     end
 
-
     render json: { homework_title: homework.homework_title,
                    homework_description: homework.homework_description,
                    homework_type: homework.homework_type,

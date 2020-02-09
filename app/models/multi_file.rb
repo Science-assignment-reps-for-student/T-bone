@@ -28,7 +28,7 @@ class MultiFile < ApplicationRecord
                                   homework)
     else
       files.each do |file_name, file|
-        path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{file_name}.hwp"
+        path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{file_name}"
         created_file = homework.multi_files.create(team_id: team.id,
                                                    source: ApplicationController.upload_file(file, path),
                                                    file_name: file_name)
