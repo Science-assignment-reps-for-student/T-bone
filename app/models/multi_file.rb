@@ -7,7 +7,8 @@ class MultiFile < ApplicationRecord
     class_num = User.find_by_id(user_id).user_number / 100 - 10
     team = Team.find_by_leader_id_and_homework_id(user_id, homework.id)
 
-    return 404 unless homework
+    return 404 if homework
+    return 404 if homework.homework_type == 1
     return 403 unless team
 
     unless update

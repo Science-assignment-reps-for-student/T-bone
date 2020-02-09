@@ -7,6 +7,7 @@ class SingleFile < ApplicationRecord
     user = User.find_by_id(user_id)
 
     return 404 unless homework
+    return 404 if homework.homework_type != 0 && homework.homework_type != 2
 
     unless update
       return 409 unless homework.single_files.blank?
