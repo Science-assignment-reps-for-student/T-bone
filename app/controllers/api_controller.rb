@@ -61,12 +61,14 @@ class ApiController < ApplicationController
       end
     end
 
-    # exp = Time.at([params[:homework_1_deadline].to_i,
-    #                params[:homework_2_deadline].to_i,
-    #                params[:homework_3_deadline].to_i,
-    #                params[:homework_4_deadline].to_i].max)
-    #
-    # MakeExcelJob.set(wait_until: exp).perform_later(homework.id)
+    if homework.homework_type == 1
+      exp = Time.at([params[:homework_1_deadline].to_i,
+                     params[:homework_2_deadline].to_i,
+                     params[:homework_3_deadline].to_i,
+                     params[:homework_4_deadline].to_i].max)
+
+      MakeExcelJob.set(wait_until: exp).perform_later(homework.id)
+    end
 
     render status: 201
   end
