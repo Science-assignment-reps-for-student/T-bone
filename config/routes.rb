@@ -30,6 +30,10 @@ Rails.application.routes.draw do
   post '/user', to: 'api#create_user'
   post '/', to: 'api#fun'
 
+  # # SideKiq
+  # require 'sidekiq/web'
+  # mount Sidekiq::Web => '/sidekiq'
+
   # Sockets
   # mount ActionCable.server, at: '/cable'
 end

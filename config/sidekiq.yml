@@ -1,0 +1,19 @@
+:pidfile: ./tmp/pids/sidekiq.pid
+:daemon: true
+
+development:
+  :verbose: true
+  :logfile: ./log/sidekiq.development.log
+  :concurrency: 5
+  :timeout: 30
+  :queues:
+    - modified_post
+    - mailers
+
+production:
+  :verbose: false
+  :logfile: ./log/sidekiq.production.log
+  :concurrency: 10
+  :timeout: 5
+  :queues:
+    - create_excels
