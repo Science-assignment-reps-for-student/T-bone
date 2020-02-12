@@ -10,7 +10,7 @@ class SingleFile < ApplicationRecord
     return 404 if homework.homework_type != 0 && homework.homework_type != 2
 
     unless update
-      return 409 unless homework.single_files.blank?
+      return 409 unless user.single_files.blank?
     end
 
     FileUtils.mkdir_p("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}")

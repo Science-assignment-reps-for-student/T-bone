@@ -12,7 +12,7 @@ class MultiFile < ApplicationRecord
     return 403 unless team
 
     unless update
-      return 409 unless homework.multi_files.blank?
+      return 409 unless team.multi_files.blank?
     end
 
     FileUtils.mkdir_p("#{ENV['MULTI_FILE_PATH']}/#{homework.id}")
