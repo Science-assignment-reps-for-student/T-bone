@@ -10,17 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_080453) do
+ActiveRecord::Schema.define(version: 2020_02_09_090911) do
 
   create_table "auth_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "auth_code", null: false
     t.integer "user_number", null: false
-  end
-
-  create_table "auth_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "auth_email", limit: 30
-    t.string "auth_state"
-    t.string "email_code", limit: 36, null: false
   end
 
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

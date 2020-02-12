@@ -78,7 +78,7 @@ class ApplicationController < ActionController::API
   end
 
   def self.upload_file(file, path)
-    File.rename(file, path)
+    FileUtils.mv(file, path)
 
     path
   end
