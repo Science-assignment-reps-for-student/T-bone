@@ -1,6 +1,7 @@
 defaults: &defaults
   host: <%= ENV['SCARFS_DB'] %>
   port: 6379
+  db: 1
 
 development:
   <<: *defaults
