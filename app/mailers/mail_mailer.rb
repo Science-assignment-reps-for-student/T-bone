@@ -1,8 +1,22 @@
 class MailMailer < ApplicationMailer
   def submission(target, title, type, late)
+    @user_name = User.find_by_user_email(target).user_name
     @homework_title = title
-    @homework_type = type
-    @late = late
-    mail(from: 'notify@dsm.hs.kr', to: target, subject: "[제출 알림]#{title}", content_type: 'text/html')
+    @homework_type = if type.zero?
+                       '개인'
+                     elsif type == 1
+                       '팀'
+                     else
+                       '실험'
+                     end
+    @late = if late
+              '지각'
+            else
+              '제출'
+            end
+    mail(from: 'notify@scarfs.hs.kr',
+         to: target,
+         subject: "[제출 알림][#{@homework_type}]#{title}",
+         content_type: 'text/html')
   end
 end
