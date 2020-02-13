@@ -62,20 +62,20 @@ class ShowFileController < ApplicationController
 
     if homework.homework_type.zero?
       homework_type = '개인'
-      path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}"
+      path = ENV['SINGLE_FILE_PATH']
 
     elsif homework.homework_type == 1
       homework_type = '팀'
-      path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}"
+      path = ENV['MULTI_FILE_PATH']
 
     else
       homework_type = '실험'
-      path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}"
+      path = ENV['SINGLE_FILE_PATH']
 
     end
 
-    FileUtils.rm_rf("#{path}.zip")
-    system("zip [#{homework_type}]#{homework.homework_title}.zip #{path}")
-    send_file("[#{homework_type}]#{homework.homework_title}.zip")
+    FileUtils.rm_rf("[#{homework_type}]#{homework.homework_title}.zip")
+    system("zip #{path}/'[#{homework_type}]#{homework.homework_title}'.zip #{path}/#{homework.id}")
+    send_file("#{path}/[#{homework_type}]#{homework.homework_title}.zip")
   end
 end

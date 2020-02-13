@@ -140,7 +140,8 @@ class ApiController < ApplicationController
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
                          file_id: file.id,
-                         user_id: file.user.id)
+                         user_id: file.user.id,
+                         user_number: file.user.user_number)
       end
     end
 

@@ -14,7 +14,8 @@ ENV SCARFS_DB $SCARFS_DB
 RUN apt-get update && \
     apt-get install -y \
     default-libmysqlclient-dev \
-    nodejs
+    nodejs \
+    zip
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
