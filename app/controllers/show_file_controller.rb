@@ -75,6 +75,7 @@ class ShowFileController < ApplicationController
     end
 
     FileUtils.rm_rf("#{path}.zip")
-    send_file(system("zip [#{homework_type}]#{homework.homework_title}.zip #{path}"))
+    system("zip [#{homework_type}]#{homework.homework_title}.zip #{path}")
+    send_file("[#{homework_type}]#{homework.homework_title}.zip")
   end
 end
