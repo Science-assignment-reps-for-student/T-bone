@@ -17,8 +17,8 @@ class MultiFile < ApplicationRecord
 
     FileUtils.mkdir_p("#{ENV['MULTI_FILE_PATH']}/#{homework.id}")
     if files.length == 1
-      path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}/[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp"
-      file_name = "[팀][#{homework.homework_title}] #{class_num}_#{team.team_name}.hwp"
+      path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}/[팀][#{homework.homework_title}] #{class_num}반_#{team.team_name}조.hwp"
+      file_name = "[팀][#{homework.homework_title}] #{class_num}반_#{team.team_name}조.hwp"
 
       created_file = homework.multi_files.create(team_id: team.id,
                                                  source: ApplicationController.upload_file(files.values[0], path),

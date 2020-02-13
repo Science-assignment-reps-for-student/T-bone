@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/multi/:file_id', to: 'show_file#show_multi'
   get '/excel/:homework_id', to: 'show_file#show_excel'
   get '/notice/:file_id', to: 'show_file#show_notice'
+  get '/file-zip/:homework_id', to: 'show_file#show_many'
 
   # create files
   post '/single/:homework_id', to: 'create_file#create_single'
@@ -28,7 +29,6 @@ Rails.application.routes.draw do
   # Temp
   post '/auth', to: 'api#auth'
   post '/user', to: 'api#create_user'
-  post '/', to: 'api#fun'
 
   # # SideKiq
   # require 'sidekiq/web'

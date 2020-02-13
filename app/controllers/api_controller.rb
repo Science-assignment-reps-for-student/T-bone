@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required, except: %i[create create_user auth fun]
+  before_action :jwt_required, except: %i[create_user auth]
 
   def show
     requires(:homework_id)
@@ -61,7 +61,7 @@ class ApiController < ApplicationController
       end
     end
 
-    if homework.homework_type == 1
+    unless homework.homework_type.zero?
       exp = Time.at([params[:homework_1_deadline].to_i,
                      params[:homework_2_deadline].to_i,
                      params[:homework_3_deadline].to_i,
@@ -139,7 +139,8 @@ class ApiController < ApplicationController
     else
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
-                         file_id: file.id)
+                         file_id: file.id,
+                         user_id: file.user.id)
       end
     end
 
@@ -176,9 +177,5 @@ class ApiController < ApplicationController
                  user_type: params[:user_type])
 
     render status: 201
-  end
-
-  def fun
-    render json: params
   end
 end

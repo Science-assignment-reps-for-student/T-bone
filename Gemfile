@@ -19,7 +19,6 @@ gem 'redis', '~> 4.0'
 gem 'sidekiq'
 gem 'connection_pool'
 gem 'redis-objects'
-
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

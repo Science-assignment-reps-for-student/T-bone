@@ -8,6 +8,8 @@ class ExcelFile < ApplicationRecord
     format_default = Spreadsheet::Format.new(horizontal_align: :center)
     format_unsubmit = Spreadsheet::Format.new(horizontal_align: :center,
                                               pattern_fg_color: :yellow)
+    format_extra = Spreadsheet::Format.new(horizontal_align: :center,
+                                           pattern_fg_color: :red)
 
     sheets = [book.create_worksheet(name: '1반'),
               book.create_worksheet(name: '2반'),
@@ -41,7 +43,12 @@ class ExcelFile < ApplicationRecord
         cooperation = "#{evaluation.cooperation} / #{user_team.members.count * 3}"
       end
 
-      if user_team.multi_files.blank?
+      if user_team.nil?
+        sheets[class_number - 1].default_format = format_extra
+        sheets[class_number - 1].row(row).push(nil,
+                                               user.user_number,
+                                               user.user_name)
+      elsif user_team.multi_files.blank?
         sheets[class_number - 1].default_format = format_unsubmit
         sheets[class_number - 1].row(row).push(user_team.name,
                                                user.user_number,

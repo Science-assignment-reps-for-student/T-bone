@@ -16,6 +16,8 @@ RUN apt-get update && \
     default-libmysqlclient-dev \
     nodejs
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
 RUN gem install bundler
 
 RUN mkdir scarfs
