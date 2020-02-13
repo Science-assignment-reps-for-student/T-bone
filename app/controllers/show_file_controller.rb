@@ -75,7 +75,7 @@ class ShowFileController < ApplicationController
     end
 
     FileUtils.rm_rf("[#{homework_type}]#{homework.homework_title}.zip")
-    system("zip -r #{path}/'[#{homework_type}]#{homework.homework_title}'.zip #{homework.id}")
+    system("zip --junk-paths #{path}/'[#{homework_type}]#{homework.homework_title}'.zip #{path}/#{homework.id}/*")
     send_file("#{path}/[#{homework_type}]#{homework.homework_title}.zip")
     render json: { file_name: "[#{homework_type}]#{homework.homework_title}.zip" }
   end
