@@ -134,7 +134,9 @@ class ApiController < ApplicationController
     if homework.homework_type == 1
       homework.multi_files.each do |file|
         file_info.append(file_name: file.file_name,
-                         file_id: file.id)
+                         file_id: file.id,
+                         team_id: file.team.id,
+                         team_name: file.team.team_name)
       end
     else
       homework.single_files.each do |file|
