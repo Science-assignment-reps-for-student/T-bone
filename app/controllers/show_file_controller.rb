@@ -18,7 +18,7 @@ class ShowFileController < ApplicationController
     requires(:file_id)
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
-    file = SingleFile.find_by_id(params[:file_id])
+    file = MultiFile.find_by_id(params[:file_id])
     return render status: 404 unless file
     return render status: 403 if !file.team.member_ids.include?(payload['user_id']) &&
                                  User.find_by_id(payload['user_id']).user_type < 1
