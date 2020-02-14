@@ -147,7 +147,9 @@ class ApiController < ApplicationController
       end
     end
 
-    render json: file_info, status: 200
+    render json: { file: file_info,
+                   file_zip_info: "[#{homework_type}]#{homework.homework_title}.zip" },
+           status: 200
   end
 
   def auth
