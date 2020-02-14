@@ -147,6 +147,17 @@ class ApiController < ApplicationController
       end
     end
 
+    case homework.homework_type
+
+    when 0
+      homework_type = '개인'
+    when 1
+      homework_type = '팀'
+    when 2
+      homework_type = '실험'
+
+    end
+
     render json: { file: file_info,
                    file_zip_info: "[#{homework.homework_type}]#{homework.homework_title}.zip" },
            status: 200
