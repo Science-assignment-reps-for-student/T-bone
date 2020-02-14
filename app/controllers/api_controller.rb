@@ -148,7 +148,7 @@ class ApiController < ApplicationController
     end
 
     render json: { file: file_info,
-                   file_zip_info: "[#{homework_type}]#{homework.homework_title}.zip" },
+                   file_zip_info: "[#{homework.homework_type}]#{homework.homework_title}.zip" },
            status: 200
   end
 
