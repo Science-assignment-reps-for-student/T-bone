@@ -24,12 +24,7 @@ Rails.application.routes.draw do
     patch '/homework/:homework_id', to: 'api#update'
     delete '/homework/:homework_id', to: 'api#destroy'
     post '/homework', to: 'api#create'
-
     get '/files/:homework_id', to: 'api#show_files'
-
-    # Temp
-    post '/auth', to: 'api#auth'
-    post '/user', to: 'api#create_user'
 
     # # SideKiq
     # require 'sidekiq/web'
