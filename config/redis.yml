@@ -1,5 +1,5 @@
 defaults: &defaults
-  host: <%= ENV['SCARFS_DB'] %>
+  host: <%= ENV['REDIS_URL'] %>
   port: 6379
   db: 1
 
