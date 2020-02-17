@@ -10,6 +10,7 @@ ENV EXCEL_FILE_PATH /scarfs/storage/excel_file
 ENV SINGLE_FILE_PATH /scarfs/storage/single_file
 ENV MULTI_FILE_PATH /scarfs/storage/multi_file
 ENV SCARFS_DB $SCARFS_DB
+ENV REDIS_URL $REDIS_URL
 
 RUN apt-get update && \
     apt-get install -y \
