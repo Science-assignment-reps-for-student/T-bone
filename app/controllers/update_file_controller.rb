@@ -16,7 +16,7 @@ class UpdateFileController < ApplicationController
     user = User.find_by_id(payload['user_id'])
     homework = Homework.find_by_id(params[:homework_id])
 
-    return render status: 412 if homework.single_files.blank?
+    return render status: 412 unless user.single_files.find_by_homework_id(homework.id)
 
     FileUtils.rm_rf("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}")
     user.single_files.destroy_all
@@ -51,7 +51,7 @@ class UpdateFileController < ApplicationController
     team = homework.teams.find_by_leader_id(user.id)
 
     return render status: 403 unless team
-    return render status: 412 if homework.multi_files.blank?
+    return render status: 412 unless team.multi_files.find_by_homework_id(homework.id)
 
 
     FileUtils.rm_rf("#{ENV['MULTI_FILE_PATH']}/#{homework.id}")
