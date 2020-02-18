@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-<html lang="ko">
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -8,48 +10,67 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 </head>
-<body style="width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: #EEEEEE;
-    display: flex;
-    justify-content: center;
-    align-items: center;">
-    <main style="width: 90%;
-        height: 90%;">
-        <header style="height: 45px;
-            background: #232323;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 8px 8px 0 0;
-            padding: 0 24px;">
-            <span style="color: #FFFFFF;
-                font-size: 18px;
-                font-weight: lighter;
-                font-family: 'Noto Sans KR', sans-serif;">www.dsm-scarfs.hs.kr</span>
-            <span style="color: #FFFFFF;
-                font-size: 24px;
-                font-family: 'Roboto', sans-serif;">Scarfs</span>
-        </header>
-        <section style="background-color: #ffffff;
-            padding: 16px 64px;
-            border-bottom: 1px solid #EEEEEE;">
-            <article style="font-family: 'Noto Sans KR', sans-serif;">
-                <p style="margin: 0;">안녕하세요. 대덕소프트웨어마이스터고등학교 Scarfs입니다.</p>
-                <p style="margin: 0;"><%= @user_name %>님이 제출한 <span style="font-weight: bold;">[<%= @homework_type %>] <%= @homework_title %>과제가 </span><span style="color: #FF5700; font-weight: bold;"><%= @late %></span>처리 되었습니다.</p>
-            </article>
-        </section>
-        <footer style="border-radius: 0 0 8px 8px;
-            background-color: #ffffff;
-            padding: 16px 64px;">
-            <div style="font-family: 'Noto Sans KR', sans-serif;">
-                <p style="margin: 0;">SCARFS 회원가입 요청으로 발신된 메일입니다.</p>
-                <p style="margin: 0;">본 메일은 발신전용이며 회신되지 않습니다.</p>
-            </div>
-        </footer>
+<body>
+    <div style="width: 100%;
+        height: auto;
+        min-height: 244px;
+        margin: 0;
+        padding: 24px;
+        background-color: #EEEEEE;
+        position: relative;
+        text-align: center;">
+        <div style="width: 90%;
+            height: auto;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 0%);">
+            <div style="height: 46px;
+                line-height: 46px;
+                background: #232323;
+                position: relative;
+                border-radius: 8px 8px 0 0;
+                padding: 0 24px;
+                text-align: left;">
 
-    </main>
+                    <span style="color: #FFFFFF;
+                    float:left;
+                    left: 5%;
+                    font-size: 18px;
+                    font-weight: lighter;
+                    font-family: 'Noto Sans KR', sans-serif;
+                    list-style: none;
+                    "><a href="https://dsm-scarfs.hs.kr" style="text-decoration: none; color: #ffffff;">www.dsm-scarfs.hs.kr</a></span>
+
+                    <span style="color: #FFFFFF;
+                    float: right;
+                    font-size: 24px;
+                    font-family: 'Roboto', sans-serif;
+                    ">Scarfs</span>
+            </div>
+            <div style="height: auto;
+                box-sizing: border-box;
+                background-color: #ffffff;
+                padding: 16px 64px;
+                border-bottom: 1px solid #EEEEEE;
+                text-align: left;">
+                <div style="font-family: 'Noto Sans KR', sans-serif; text-align: left;">
+                    <p style="margin: 0;">안녕하세요. 대덕소프트웨어마이스터고등학교 Scarfs입니다.</p>
+                    <p style="margin: 0;"><%= @user_name %>님이 제출한 <span style="font-weight: bold;">[<%= @homework_type %>] <%= @homework_title %>이 </span><span style="color: #FF5700; font-weight: bold;"><%= @late %></span>되었습니다.</p>
+                </div>
+            </div>
+            <div style="height: auto;
+                box-sizing: border-box;
+                border-radius: 0 0 8px 8px;
+                background-color: #ffffff;
+                padding: 16px 64px;
+                text-align: left;">
+                <div style="font-family: 'Noto Sans KR', sans-serif;">
+                    <p style="margin: 0;">SCARFS 회원가입 요청으로 발신된 메일입니다.</p>
+                    <p style="margin: 0;">본 메일은 발신전용이며 회신되지 않습니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
