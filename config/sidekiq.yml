@@ -17,4 +17,3 @@ production:
   :timeout: 5
   :queues:
     - create_excels
-    - default_mailer_queue
