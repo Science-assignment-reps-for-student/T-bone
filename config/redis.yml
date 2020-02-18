@@ -1,6 +1,5 @@
 defaults: &defaults
   host: <%= ENV['REDIS_URL'] %>
-  port: 6379
   db: 1
 
 development:
