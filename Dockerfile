@@ -27,5 +27,6 @@ COPY . scarfs
 WORKDIR scarfs
 
 RUN bundle install
+RUN bundle exec sidekiq
 
 EXPOSE 3000
