@@ -37,5 +37,7 @@ module TBone
     config.api_only = true
     config.time_zone = 'Seoul'
     config.active_record.default_timezone = :utc
+
+    config.action_mailer.deliver_later_queue_name = 'default_mailer_queue'
   end
 end
