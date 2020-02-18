@@ -53,10 +53,14 @@ class CreateFileController < ApplicationController
                                          false)
     return render status: status if status
 
-    MailMailer.submission(user.user_email,
-                          homework.homework_title,
-                          homework.homework_type,
-                          homework.single_files.last.late).deliver_later
+    team.members.each do |member|
+      user = User.find_by_id(member.user_id)
+
+      MailMailer.submission(user.user_email,
+                            homework.homework_title,
+                            homework.homework_type,
+                            homework.multi_files.last.late).deliver_later
+    end
     render status: 201
   end
 
