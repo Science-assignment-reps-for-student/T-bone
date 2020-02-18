@@ -8,7 +8,6 @@ development:
   :timeout: 30
   :queues:
     - create_excels
-    - default_mailer_queue
 
 production:
   :verbose: false

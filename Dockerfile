@@ -27,5 +27,6 @@ COPY . scarfs
 WORKDIR scarfs
 
 RUN bundle install
+RUN bundle exec sidekiq -d -L log/sidekiq.log -C config/sidekiq.yml -e production
 
 EXPOSE 3000
