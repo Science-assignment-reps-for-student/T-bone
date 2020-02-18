@@ -27,8 +27,8 @@ Rails.application.routes.draw do
     get '/files/:homework_id', to: 'api#show_files'
 
     # # SideKiq
-    # require 'sidekiq/web'
-    # mount Sidekiq::Web => '/sidekiq'
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
 
     # Sockets
     # mount ActionCable.server, at: '/cable'
