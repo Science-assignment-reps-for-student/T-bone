@@ -130,6 +130,7 @@ class ApiController < ApplicationController
     homework = Homework.find_by_id(params[:homework_id])
 
     file_info = []
+    response = {}
 
     if homework.homework_type == 1
       homework.multi_files.each do |file|
@@ -138,6 +139,7 @@ class ApiController < ApplicationController
                          team_id: file.team.id,
                          team_name: file.team.team_name)
       end
+      response[:file_excel_id] = homework.excel_file.id
     else
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
@@ -158,8 +160,9 @@ class ApiController < ApplicationController
 
     end
 
-    render json: { file: file_info,
-                   file_zip_info: "[#{homework_type}]#{homework.homework_title}.zip" },
-           status: 200
+    response[:file] = file_info
+    response[:file_zip_info] = "[#{homework_type}]#{homework.homework_title}.zip"
+
+    render json: response, status: 200
   end
 end
