@@ -3,6 +3,11 @@ class ExcelFile < ApplicationRecord
 
   def self.create_excel(homework_id)
     homework = Homework.find_by_id(homework_id)
+    submit_file = if homework.homework_type == 1
+                    homework.multi_files
+                  else
+                    homework.single_files
+                  end
 
     book = Spreadsheet::Workbook.new
     format_default = Spreadsheet::Format.new(horizontal_align: :center)
@@ -48,25 +53,31 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row).push(nil,
                                                user.user_number,
                                                user.user_name)
-      elsif user_team.multi_files.blank?
+      elsif homework.homework_type == 1 && user_team.multi_files.blank?
         sheets[class_number - 1].default_format = format_unsubmit
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name)
-      elsif MutualEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil? &&
+      elsif homework.homework_type == 2 &&
+            user.single_files.find_by_homework_id(homework.id).blank?
+        sheets[class_number - 1].default_format = format_unsubmit
+        sheets[class_number - 1].row(row).push(user_team.team_name,
+                                               user.user_number,
+                                               user.user_name)
+      elsif MutualEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil? ||
             SelfEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil?
         sheets[class_number - 1].default_format = format_unsubmit
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
-                                               homework.created_at,
-                                               user_team.multi_files.last.late)
+                                               submit_file.last.created_at,
+                                               submit_file.last.late)
       else
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
-                                               homework.created_at,
-                                               user_team.multi_files.last.late,
+                                               submit_file.last.created_at,
+                                               submit_file.last.late,
                                                self_evaluation.scientific_accuracy,
                                                self_evaluation.communication,
                                                self_evaluation.attitude,
