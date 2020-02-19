@@ -28,7 +28,7 @@ class ExcelFile < ApplicationRecord
 
     row = 2
     User.where(user_type: 0).order(user_number: :desc).each do |user|
-      class_number = user.user_number % 100 - 10
+      class_number = user.user_number / 100 - 10
       team_id = homework.teams.each do |team|
         return team.id if team.member_ids.include?(user.id)
       end
