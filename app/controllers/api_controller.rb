@@ -139,7 +139,7 @@ class ApiController < ApplicationController
                          team_id: file.team.id,
                          team_name: file.team.team_name)
       end
-      response[:file_excel_id] = homework.excel_file.id
+      response[:file_excel_name] = homework.excel_file.file_name
     else
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
