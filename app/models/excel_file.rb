@@ -33,12 +33,12 @@ class ExcelFile < ApplicationRecord
         return team.id if team.member_ids.include?(user.id)
       end
       user_team = Team.find_by_id(team_id)
-      self_evaluation = user.self_evaluations.find_by_homework_id(homework_id)
+      self_evaluation = user.self_evaluations.find_by_homework_id(homework.id)
 
       communication = ''
       cooperation = ''
 
-      MutualEvaluation.where(target_id: user.id, homework_id: homework_id).each do |evaluation|
+      MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
         communication = "#{evaluation.communication} / #{user_team.members.count * 3}"
         cooperation = "#{evaluation.cooperation} / #{user_team.members.count * 3}"
       end
@@ -53,8 +53,8 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name)
-      elsif MutualEvaluation.find_by_homework_id_and_user_id(homework_id, user.id).nil? &&
-            SelfEvaluation.find_by_homework_id_and_user_id(homework_id, user.id).nil?
+      elsif MutualEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil? &&
+            SelfEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil?
         sheets[class_number - 1].default_format = format_unsubmit
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
@@ -74,13 +74,12 @@ class ExcelFile < ApplicationRecord
                                                cooperation)
       end
     end
-    path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/[자기/상호평가]#{homework.homework_title}.xls"
+    path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{homework.id}.xls"
 
     FileUtils.mkdir_p("#{ENV['EXCEL_FILE_PATH']}/#{homework.id}")
-    File.open(path, 'r')
 
     book.write(path)
     homework.excel_file.create!(source: path,
-                                file_name: "[자기/상호평가]#{homework.homework_title}.xls")
+                                file_name: "#{homework.id}.xls")
   end
 end
