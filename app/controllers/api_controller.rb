@@ -141,7 +141,9 @@ class ApiController < ApplicationController
                          team_id: file.team.id,
                          team_name: file.team.team_name)
       end
-      response[:file_excel_name] = homework.excel_file.file_name
+      if homework.excel_file
+        response[:file_excel_name] = homework.excel_file.file_name
+      end
     else
       return render status: 404 if homework.multi_files.blank?
 
