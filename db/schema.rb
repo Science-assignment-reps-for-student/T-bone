@@ -10,17 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_09_090911) do
+ActiveRecord::Schema.define(version: 2020_02_19_071559) do
 
   create_table "auth_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "auth_code", null: false
     t.integer "user_number", null: false
-  end
-
-  create_table "auth_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "auth_email", limit: 30
-    t.string "auth_state"
-    t.string "email_code", limit: 36, null: false
   end
 
   create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -51,7 +45,6 @@ ActiveRecord::Schema.define(version: 2020_02_09_090911) do
   create_table "members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "team_id"
     t.bigint "user_id"
-    t.integer "uuid"
     t.index ["team_id"], name: "index_members_on_team_id"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
@@ -70,13 +63,11 @@ ActiveRecord::Schema.define(version: 2020_02_09_090911) do
   create_table "mutual_evaluations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "homework_id"
-    t.bigint "team_id"
     t.bigint "target_id"
     t.integer "communication", null: false
     t.integer "cooperation", null: false
     t.index ["homework_id"], name: "index_mutual_evaluations_on_homework_id"
     t.index ["target_id"], name: "index_mutual_evaluations_on_target_id"
-    t.index ["team_id"], name: "index_mutual_evaluations_on_team_id"
     t.index ["user_id", "target_id", "homework_id"], name: "redundancy_check", unique: true
     t.index ["user_id"], name: "index_mutual_evaluations_on_user_id"
   end

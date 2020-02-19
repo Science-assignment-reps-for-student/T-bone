@@ -17,6 +17,7 @@ default: &default
   password: <%= ENV['SCARFS_PASSWORD'] %>
   host: <%= ENV['SCARFS_DB'] %>
   port: 3306
+  strict: false
 
 development:
   <<: *default
