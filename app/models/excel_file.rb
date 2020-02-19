@@ -50,11 +50,19 @@ class ExcelFile < ApplicationRecord
                                                user.user_name)
       elsif user_team.multi_files.blank?
         sheets[class_number - 1].default_format = format_unsubmit
-        sheets[class_number - 1].row(row).push(user_team.name,
+        sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name)
+      elsif MutualEvaluation.find_by_homework_id_and_user_id(homework_id, user.id).nil? &&
+            SelfEvaluation.find_by_homework_id_and_user_id(homework_id, user.id).nil?
+        sheets[class_number - 1].default_format = format_unsubmit
+        sheets[class_number - 1].row(row).push(user_team.team_name,
+                                               user.user_number,
+                                               user.user_name,
+                                               homework.created_at,
+                                               user_team.multi_files.last.late)
       else
-        sheets[class_number - 1].row(row).push(user_team.name,
+        sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
                                                homework.created_at,
