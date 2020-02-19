@@ -133,6 +133,8 @@ class ApiController < ApplicationController
     response = {}
 
     if homework.homework_type == 1
+      return render status: 404 if homework.multi_files.blank?
+
       homework.multi_files.each do |file|
         file_info.append(file_name: file.file_name,
                          file_id: file.id,
@@ -141,6 +143,8 @@ class ApiController < ApplicationController
       end
       response[:file_excel_name] = homework.excel_file.file_name
     else
+      return render status: 404 if homework.multi_files.blank?
+
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
                          file_id: file.id,
@@ -160,7 +164,7 @@ class ApiController < ApplicationController
 
     end
 
-    response[:file] = file_info
+    response[:file_info] = file_info
     response[:file_zip_info] = "[#{homework_type}]#{homework.homework_title}.zip"
 
     render json: response, status: 200
