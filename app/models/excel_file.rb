@@ -79,7 +79,7 @@ class ExcelFile < ApplicationRecord
     FileUtils.mkdir_p("#{ENV['EXCEL_FILE_PATH']}/#{homework.id}")
 
     book.write(path)
-    homework.excel_file.create!(source: path,
-                                file_name: "#{homework.id}.xls")
+    ExcelFile.create!(source: path,
+                      file_name: "#{homework.id}.xls")
   end
 end
