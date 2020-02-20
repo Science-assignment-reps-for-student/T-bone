@@ -129,6 +129,8 @@ class ApiController < ApplicationController
 
     homework = Homework.find_by_id(params[:homework_id])
 
+    return render status: 404 unless homework
+
     file_info = []
     response = {}
 
