@@ -145,7 +145,7 @@ class ApiController < ApplicationController
         response[:file_excel_name] = homework.excel_file.file_name
       end
     else
-      return render status: 404 if homework.multi_files.blank?
+      return render status: 404 if homework.single_files.blank?
 
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
