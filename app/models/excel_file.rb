@@ -70,14 +70,14 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
-                                               submit_file.last.created_at,
-                                               submit_file.last.late)
+                                               submit_file.find_by_user_id(user.id).created_at,
+                                               submit_file.find_by_user_id(user.id).late)
       else
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
-                                               submit_file.last.created_at,
-                                               submit_file.last.late,
+                                               submit_file.find_by_user_id(user.id).created_at,
+                                               submit_file.find_by_user_id(user.id).late,
                                                self_evaluation.scientific_accuracy,
                                                self_evaluation.communication,
                                                self_evaluation.attitude,
