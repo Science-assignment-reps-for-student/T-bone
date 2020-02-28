@@ -53,26 +53,48 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row).push(nil,
                                                user.user_number,
                                                user.user_name)
-      elsif homework.homework_type == 1 && user_team.multi_files.blank?
-        sheets[class_number - 1].default_format = format_unsubmit
-        sheets[class_number - 1].row(row).push(user_team.team_name,
-                                               user.user_number,
-                                               user.user_name)
-      elsif homework.homework_type == 2 &&
-            user.single_files.find_by_homework_id(homework.id).blank?
-        sheets[class_number - 1].default_format = format_unsubmit
-        sheets[class_number - 1].row(row).push(user_team.team_name,
-                                               user.user_number,
-                                               user.user_name)
-      elsif MutualEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil? ||
-            SelfEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil?
-        sheets[class_number - 1].default_format = format_unsubmit
+        next
+      end
+
+      if MutualEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil? ||
+         SelfEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil?
+        if homework.homework_type == 1
+          sheets[class_number - 1].default_format = format_unsubmit
+          sheets[class_number - 1].row(row).push(user_team.team_name,
+                                                 user.user_number,
+                                                 user.user_name,
+                                                 submit_file.find_by_team_id(team_id).created_at,
+                                                 submit_file.find_by_team_id(team_id).late)
+        else
+          sheets[class_number - 1].default_format = format_unsubmit
+          sheets[class_number - 1].row(row).push(user_team.team_name,
+                                                 user.user_number,
+                                                 user.user_name,
+                                                 submit_file.find_by_user_id(user.id).created_at,
+                                                 submit_file.find_by_user_id(user.id).late)
+        end
+        next
+      end
+
+      if homework.homework_type == 1 && !user_team.multi_files.blank?
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
-                                               submit_file.find_by_user_id(user.id).created_at,
-                                               submit_file.find_by_user_id(user.id).late)
-      else
+                                               submit_file.find_by_team_id(team_id).created_at,
+                                               submit_file.find_by_team_id(team_id).late,
+                                               self_evaluation.scientific_accuracy,
+                                               self_evaluation.communication,
+                                               self_evaluation.attitude,
+                                               communication,
+                                               cooperation)
+      elsif user_team.multi_files.blank?
+        sheets[class_number - 1].default_format = format_unsubmit
+        sheets[class_number - 1].row(row).push(user_team.team_name,
+                                               user.user_number,
+                                               user.user_name)
+      end
+
+      if homework.homework_type == 2 && user.single_files.find_by_homework_id(homework.id)
         sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
@@ -83,6 +105,11 @@ class ExcelFile < ApplicationRecord
                                                self_evaluation.attitude,
                                                communication,
                                                cooperation)
+      elsif user.single_files.blank?
+        sheets[class_number - 1].default_format = format_unsubmit
+        sheets[class_number - 1].row(row).push(user_team.team_name,
+                                               user.user_number,
+                                               user.user_name)
       end
     end
     path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{homework.id}.xls"
