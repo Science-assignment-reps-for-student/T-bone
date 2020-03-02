@@ -3,11 +3,6 @@ class ExcelFile < ApplicationRecord
 
   def self.create_excel(homework_id)
     homework = Homework.find_by_id(homework_id)
-    submit_file = if homework.homework_type == 1
-                    homework.multi_files
-                  else
-                    homework.single_files
-                  end
 
     book = Spreadsheet::Workbook.new
     format_default = Spreadsheet::Format.new(horizontal_align: :center)
@@ -34,21 +29,14 @@ class ExcelFile < ApplicationRecord
     row = 2
     User.where(user_type: 0).order(user_number: :desc).each do |user|
       class_number = user.user_number / 100 - 10
-      team_id = homework.teams.each do |team|
-        return team.id if team.member_ids.include?(user.id)
-      end
-      user_team = Team.find_by_id(team_id)
-      self_evaluation = user.self_evaluations.find_by_homework_id(homework.id)
 
-      communication = ''
-      cooperation = ''
-
-      MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
-        communication = "#{evaluation.communication} / #{user_team.members.count * 3}"
-        cooperation = "#{evaluation.cooperation} / #{user_team.members.count * 3}"
+      team = homework.teams.each do |team|
+        return team if team.member_ids.include?(user.id)
       end
 
-      if user_team.nil?
+      if team.length == 1
+        team = team[0]
+      else
         sheets[class_number - 1].default_format = format_extra
         sheets[class_number - 1].row(row).push(nil,
                                                user.user_number,
@@ -56,60 +44,55 @@ class ExcelFile < ApplicationRecord
         next
       end
 
-      if MutualEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil? ||
-         SelfEvaluation.find_by_homework_id_and_user_id(homework.id, user.id).nil?
-        if homework.homework_type == 1
-          sheets[class_number - 1].default_format = format_unsubmit
-          sheets[class_number - 1].row(row).push(user_team.team_name,
-                                                 user.user_number,
-                                                 user.user_name,
-                                                 submit_file.find_by_team_id(team_id).created_at,
-                                                 submit_file.find_by_team_id(team_id).late)
-        else
-          sheets[class_number - 1].default_format = format_unsubmit
-          sheets[class_number - 1].row(row).push(user_team.team_name,
-                                                 user.user_number,
-                                                 user.user_name,
-                                                 submit_file.find_by_user_id(user.id).created_at,
-                                                 submit_file.find_by_user_id(user.id).late)
-        end
-        next
+      submit_file = if homework.homework_type == 1
+                      homework.multi_files.where(team_id: team.id)
+                    else
+                      homework.single_files.where(user_id: user.id)
+                    end
+
+      begin
+        self_evaluation = user.self_evaluations.find_by_homework_id(homework.id)
+        scientific_accuracy = self_evaluation.scientific_accuracy
+        self_communication = self_evaluation.communication
+        attitude = self_evaluation.attitude
+      rescue NoMethodError
+        scientific_accuracy = nil
+        self_communication = nil
+        attitude = nil
       end
 
-      if homework.homework_type == 1 && !user_team.multi_files.blank?
-        sheets[class_number - 1].row(row).push(user_team.team_name,
-                                               user.user_number,
-                                               user.user_name,
-                                               submit_file.find_by_team_id(team_id).created_at,
-                                               submit_file.find_by_team_id(team_id).late,
-                                               self_evaluation.scientific_accuracy,
-                                               self_evaluation.communication,
-                                               self_evaluation.attitude,
-                                               communication,
-                                               cooperation)
-      elsif user_team.multi_files.blank?
-        sheets[class_number - 1].default_format = format_unsubmit
-        sheets[class_number - 1].row(row).push(user_team.team_name,
-                                               user.user_number,
-                                               user.user_name)
+      communication = ''
+      cooperation = ''
+
+      MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
+        communication = "#{evaluation.communication.to_i} / #{team.members.count * 3}"
+        cooperation = "#{evaluation.cooperation.to_i} / #{team.members.count * 3}"
       end
 
-      if homework.homework_type == 2 && user.single_files.find_by_homework_id(homework.id)
-        sheets[class_number - 1].row(row).push(user_team.team_name,
+      if submit_file.blank?
+        sheets[class_number - 1].default_format = format_unsubmit
+        sheets[class_number - 1].row(row).push(team.team_name,
                                                user.user_number,
                                                user.user_name,
-                                               submit_file.find_by_user_id(user.id).created_at,
-                                               submit_file.find_by_user_id(user.id).late,
-                                               self_evaluation.scientific_accuracy,
-                                               self_evaluation.communication,
-                                               self_evaluation.attitude,
+                                               nil,
+                                               nil,
+                                               scientific_accuracy,
+                                               self_communication,
+                                               attitude,
                                                communication,
                                                cooperation)
-      elsif user.single_files.blank?
-        sheets[class_number - 1].default_format = format_unsubmit
-        sheets[class_number - 1].row(row).push(user_team.team_name,
+      else
+        sheets[class_number - 1].default_format = format_default
+        sheets[class_number - 1].row(row).push(team.team_name,
                                                user.user_number,
-                                               user.user_name)
+                                               user.user_name,
+                                               submit_file.last.created_at,
+                                               submit_file.last.late,
+                                               scientific_accuracy,
+                                               self_communication,
+                                               attitude,
+                                               communication,
+                                               cooperation)
       end
     end
     path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{homework.id}.xls"
