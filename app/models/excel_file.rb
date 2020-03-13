@@ -43,6 +43,7 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row).push(nil,
                                                user.user_number,
                                                user.user_name)
+        row_set[class_number - 1] += 1
         next
       end
 
