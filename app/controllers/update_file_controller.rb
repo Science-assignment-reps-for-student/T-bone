@@ -86,5 +86,6 @@ class UpdateFileController < ApplicationController
     homework.excel_file.destroy
 
     ExcelFile.create_excel(homework.id)
+    render status: 200
   end
 end

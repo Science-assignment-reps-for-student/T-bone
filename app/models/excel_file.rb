@@ -26,17 +26,19 @@ class ExcelFile < ApplicationRecord
       sheet.row(1).push('조', '학번', '이름', '제출 일시', '지각 여부', '과학적 정확성', '의사소통', '흥미/태도(협력)', '의사소통', '공동체(협력)')
     end
 
-    row = 2
-    User.where(user_type: 0).order(user_number: :desc).each do |user|
+    row_set = [2, 2, 2, 2]
+    User.where(user_type: 0).order(user_number: :asc).each do |user|
       class_number = user.user_number / 100 - 10
 
-      team = homework.teams.each do |team|
-        return team if team.member_ids.include?(user.id)
+      row = row_set[class_number - 1]
+      team = nil
+      homework.teams.each do |team|
+        team.members.each do |member|
+          team = team if member.user_id == user.id
+        end
       end
 
-      if team.length == 1
-        team = team[0]
-      else
+      unless team
         sheets[class_number - 1].default_format = format_extra
         sheets[class_number - 1].row(row).push(nil,
                                                user.user_number,
@@ -94,7 +96,7 @@ class ExcelFile < ApplicationRecord
                                                communication,
                                                cooperation)
       end
-      row += 1
+      row_set[class_number - 1] += 1
     end
     path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{homework.id}.xls"
 
