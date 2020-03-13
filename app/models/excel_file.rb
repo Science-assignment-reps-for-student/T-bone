@@ -94,6 +94,7 @@ class ExcelFile < ApplicationRecord
                                                communication,
                                                cooperation)
       end
+      row += 1
     end
     path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{homework.id}.xls"
 
