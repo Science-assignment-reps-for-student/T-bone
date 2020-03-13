@@ -10,18 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_19_071559) do
+ActiveRecord::Schema.define(version: 2020_03_13_023852) do
 
   create_table "auth_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "auth_code", null: false
     t.integer "user_number", null: false
   end
 
-  create_table "chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.bigint "user_id"
-    t.string "chat_message", null: false
+  create_table "auth_emails", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "auth_email", null: false
+    t.string "email_code", null: false
+    t.string "auth_state", null: false
+  end
+
+  create_table "boards", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "board_title", null: false
+    t.string "board_content", null: false
     t.datetime "created_at", null: false
-    t.index ["user_id"], name: "index_chats_on_user_id"
+    t.string "board_type", null: false
   end
 
   create_table "excel_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -47,6 +53,14 @@ ActiveRecord::Schema.define(version: 2020_02_19_071559) do
     t.bigint "user_id"
     t.index ["team_id"], name: "index_members_on_team_id"
     t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
+  create_table "messages", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.binary "is_show", limit: 1
+    t.string "message"
+    t.datetime "message_time", precision: 6
+    t.integer "message_type"
+    t.integer "user_id"
   end
 
   create_table "multi_files", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required, except: %i[create_user auth]
+  before_action :jwt_required, except: %i[create_user auth show_files]
 
   def show
     requires(:homework_id)
@@ -135,7 +135,6 @@ class ApiController < ApplicationController
     response = {}
 
     if homework.homework_type == 1
-      return render status: 404 if homework.multi_files.blank?
 
       homework.multi_files.each do |file|
         file_info.append(file_name: file.file_name,
@@ -146,8 +145,18 @@ class ApiController < ApplicationController
       if homework.excel_file
         response[:file_excel_name] = homework.excel_file.file_name
       end
+    elsif homework.homework_type == 2
+
+      homework.single_files.each do |file|
+        file_info.append(file_name: file.file_name,
+                         file_id: file.id,
+                         user_id: file.user.id,
+                         user_number: file.user.user_number)
+      end
+      if homework.excel_file
+        response[:file_excel_name] = homework.excel_file.file_name
+      end
     else
-      return render status: 404 if homework.single_files.blank?
 
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
