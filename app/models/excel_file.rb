@@ -31,14 +31,14 @@ class ExcelFile < ApplicationRecord
       class_number = user.user_number / 100 - 10
 
       row = row_set[class_number - 1]
-      team = nil
+      user_team = nil
       homework.teams.each do |team|
         team.members.each do |member|
-          team = team if member.user_id == user.id
+          user_team = team if member.user_id == user.id
         end
       end
 
-      unless team
+      unless user_team
         sheets[class_number - 1].default_format = format_extra
         sheets[class_number - 1].row(row).push(nil,
                                                user.user_number,
@@ -47,7 +47,7 @@ class ExcelFile < ApplicationRecord
       end
 
       submit_file = if homework.homework_type == 1
-                      homework.multi_files.where(team_id: team.id)
+                      homework.multi_files.where(team_id: user_team.id)
                     else
                       homework.single_files.where(user_id: user.id)
                     end
@@ -67,13 +67,13 @@ class ExcelFile < ApplicationRecord
       cooperation = ''
 
       MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
-        communication = "#{evaluation.communication.to_i} / #{team.members.count * 3}"
-        cooperation = "#{evaluation.cooperation.to_i} / #{team.members.count * 3}"
+        communication = "#{evaluation.communication.to_i} / #{user_team.members.count * 3}"
+        cooperation = "#{evaluation.cooperation.to_i} / #{user_team.members.count * 3}"
       end
 
       if submit_file.blank?
         sheets[class_number - 1].default_format = format_unsubmit
-        sheets[class_number - 1].row(row).push(team.team_name,
+        sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
                                                nil,
@@ -85,7 +85,7 @@ class ExcelFile < ApplicationRecord
                                                cooperation)
       else
         sheets[class_number - 1].default_format = format_default
-        sheets[class_number - 1].row(row).push(team.team_name,
+        sheets[class_number - 1].row(row).push(user_team.team_name,
                                                user.user_number,
                                                user.user_name,
                                                submit_file.last.created_at,
