@@ -14,13 +14,9 @@
 !/tmp/.keep
 
 # Ignore uploaded files in development.
-/storage/*
+/storage
 !/storage/.keep
 .byebug_history
-!/storage/excel_file
-!/storage/multi_file
-!/storage/notice_file
-!/storage/single_file
 
 /shared
 .DS_Store

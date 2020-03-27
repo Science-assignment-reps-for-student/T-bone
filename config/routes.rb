@@ -26,6 +26,9 @@ Rails.application.routes.draw do
     post '/homework', to: 'api#create'
     get '/files/:homework_id', to: 'api#show_files'
 
+    # Boards
+    resources :boards
+
     # # SideKiq
     require 'sidekiq/web'
     mount Sidekiq::Web => '/sidekiq'
