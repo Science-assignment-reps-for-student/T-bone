@@ -13,6 +13,20 @@ class ShowFileController < ApplicationController
     send_file(file.source)
   end
 
+  def show_image
+    requires (:file_id)
+
+    file = ImageFile.find_by_id(params[:file_id])
+    user_class_number = current_user.user_number / 100 - 10
+    return render status: 404 unless file
+
+    if file.board.class_number == user_class_number ||
+       current_user.user_type == 1
+      send_data(file.source)
+    else
+      render status: 403
+    end
+  end
 
   def show_multi
     requires(:file_id)
