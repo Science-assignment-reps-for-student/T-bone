@@ -14,14 +14,20 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password: <%= ENV['SCARFS_PASSWORD'] %>
-  host: <%= ENV['SCARFS_DB'] %>
   port: 3306
   strict: false
 
 development:
   <<: *default
-  database: scarfs_production
+  password: <%= ENV['ROOT_PASSWORD'] %>
+  host: '127.0.0.1'
+  database: scarfs_development
+
+test:
+  <<: *default
+  password: <%= ENV['ROOT_PASSWORD'] %>
+  host: '127.0.0.1'
+  database: scarfs_test
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -53,4 +59,6 @@ development:
 #  password: <%#= ENV['T_BONE_DATABASE_PASSWORD'] %>
 production:
   <<: *default
+  password: <%= ENV['SCARFS_PASSWORD'] %>
+  host: <%= ENV['SCARFS_DB'] %>
   database: scarfs_production
