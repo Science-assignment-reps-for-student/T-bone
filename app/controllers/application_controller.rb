@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
-  protected
   require 'jwt_base'
   @@jwt_base = JWTBase::JWTBase.new(ENV['SECRET_KEY_BASE'], 1.days, 2.weeks)
 
@@ -10,11 +9,11 @@ class ApplicationController < ActionController::API
       return render status: 401
     end
 
-    payload = @@jwt_base.get_jwt_payload(token)
+    @payload = @@jwt_base.get_jwt_payload(token)
 
-    return render status: 401 unless payload
-    return render status: payload['err'] if payload['err']
-    return render status: 403 unless payload['type'] == 'access_token'
+    return render status: 401 unless @payload
+    return render status: @payload['err'] if @payload['err']
+    return render status: 403 unless @payload['type'] == 'access_token'
   end
 
   def refresh_token_required
@@ -24,11 +23,11 @@ class ApplicationController < ActionController::API
       return render status: 401
     end
 
-    payload = @@jwt_base.get_jwt_payload(token)
+    @payload = @@jwt_base.get_jwt_payload(token)
 
-    return render status: 401 unless payload
-    return render status: payload['err'] if payload['err']
-    return render status: 403 unless payload['type'] == 'refresh_token'
+    return render status: 401 unless @payload
+    return render status: @payload['err'] if @payload['err']
+    return render status: 403 unless @payload['type'] == 'refresh_token'
   end
 
   def upload_file(file, path)
@@ -81,5 +80,9 @@ class ApplicationController < ActionController::API
     FileUtils.mv(file, path)
 
     path
+  end
+
+  def current_user
+    User.find_by_id(@payload['user_id'])
   end
 end
