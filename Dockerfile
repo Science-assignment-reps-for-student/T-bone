@@ -9,6 +9,7 @@ ENV NOTICE_FILE_PATH /scarfs/storage/notice_file
 ENV EXCEL_FILE_PATH /scarfs/storage/excel_file
 ENV SINGLE_FILE_PATH /scarfs/storage/single_file
 ENV MULTI_FILE_PATH /scarfs/storage/multi_file
+ENV IMAGE_FILE_PATH /scarfs/storage/image_file
 ENV SCARFS_DB $SCARFS_DB
 ENV REDIS_URL $REDIS_URL
 
