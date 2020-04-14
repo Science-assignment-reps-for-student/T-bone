@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get '/single/:file_id', to: 'show_file#show_single'
     get '/multi/:file_id', to: 'show_file#show_multi'
     get '/excel/:homework_id', to: 'show_file#show_excel'
+    get '/image/:file_id', to: 'show_file#show_image'
     get '/notice/:file_id', to: 'show_file#show_notice'
     get '/file-zip/:homework_id', to: 'show_file#show_many'
 
@@ -26,11 +27,11 @@ Rails.application.routes.draw do
     post '/homework', to: 'api#create'
     get '/files/:homework_id', to: 'api#show_files'
 
-    # # SideKiq
+    # SideKiq
     require 'sidekiq/web'
     mount Sidekiq::Web => '/sidekiq'
 
-    # Sockets
-    # mount ActionCable.server, at: '/cable'
+    # Boards
+    resources :board, controller: :boards, param: :board_id
   end
 end
