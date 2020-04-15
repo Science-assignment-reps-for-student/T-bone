@@ -55,10 +55,13 @@ class BoardsController < ApplicationController
     end
 
     @board = if current_user.user_type.zero?
-               Board.create!(params)
+               current_user.boards.create!(title: params[:title],
+                                           description: params[:description],
+                                           class_number: current_user.user_number / 100 - 10)
              else
                current_user.boards.create!(title: params[:title],
-                                           description: params[:description])
+                                           description: params[:description],
+                                           class_number: params[:class_number])
              end
     ImageFile.create_image_file(@board.id, files)
 
