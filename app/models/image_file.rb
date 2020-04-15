@@ -9,7 +9,7 @@ class ImageFile < ApplicationRecord
     files.each do |file_name, file|
       path = "#{ENV['IMAGE_FILE_PATH']}/#{board.id}/#{file_name}"
       board.image_files.create!(source: ApplicationController.upload_file(file, path),
-                                path: file_name)
+                                file_name: file_name)
     end
   end
 end
