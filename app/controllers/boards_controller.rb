@@ -6,14 +6,19 @@ class BoardsController < ApplicationController
   def index
     @board = Board.where(class: current_user.user_number / 100 - 10)
 
-    render json: {
-      board_id: @board.id,
-      writer: @board.user.user_name,
-      title: @board.title,
-      created_at: @board.created_at,
-      updated_at: @board.updated_at,
-      class: @board.class_number
-    }
+    response = []
+    @board.each_with_object({}) do |board, json|
+      json['board_id'] = board.id
+      json['writer'] = board.user.user_name
+      json['title'] = board.title
+      json['created_at'] = board.created_at
+      json['updated_at'] = board.updated_at
+      json['class'] = board.class_number
+
+      response << json
+    end
+
+    render json: response
   end
 
   # GET /boards/1
