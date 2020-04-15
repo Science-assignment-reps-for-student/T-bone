@@ -4,14 +4,16 @@ class BoardsController < ApplicationController
 
   # GET /boards
   def index
-    @board = if current_user.user_type.zero?
-               Board.where(class_number: current_user.user_number / 100 - 10)
-             else
-               Board.where(class_number: params[:class_number])
-             end
+    board = if current_user.user_type.zero?
+              Board.where(class_number: current_user.user_number / 100 - 10)
+            else
+              Board.where(class_number: params[:class_number])
+            end
 
     response = []
-    @board.each_with_object({}) do |board, json|
+    board.each do |board|
+      json = {}
+
       json['board_id'] = board.id
       json['writer'] = board.user.user_name
       json['title'] = board.title
@@ -47,6 +49,7 @@ class BoardsController < ApplicationController
         writer: @board.user.user_name,
         title: @board.title,
         description: @board.description,
+        file_id: @board.image_file_ids,
         created_at: @board.created_at,
         updated_at: @board.updated_at,
         class: @board.class_number
