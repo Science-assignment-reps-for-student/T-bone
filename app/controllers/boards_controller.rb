@@ -4,7 +4,11 @@ class BoardsController < ApplicationController
 
   # GET /boards
   def index
-    @board = Board.where(class_number: current_user.user_number / 100 - 10)
+    @board = if current_user.user_type.zero?
+               Board.where(class_number: current_user.user_number / 100 - 10)
+             else
+               Board.where(class_number: params[:class_number])
+             end
 
     response = []
     @board.each_with_object({}) do |board, json|
