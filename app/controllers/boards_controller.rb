@@ -44,7 +44,11 @@ class BoardsController < ApplicationController
 
   # POST /boards
   def create
-    requires(title: String, description: String)
+    if current_user.user_type.zero?
+      requires(title: String, description: String)
+    else
+      requires(title: String, description: String, class_number: Integer)
+    end
 
     files = {}
     params[:file]&.each do |file|
