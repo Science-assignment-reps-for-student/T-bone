@@ -4,7 +4,7 @@ class BoardsController < ApplicationController
 
   # GET /boards
   def index
-    @board = Board.where(class: current_user.user_number / 100 - 10)
+    @board = Board.where(class_number: current_user.user_number / 100 - 10)
 
     response = []
     @board.each_with_object({}) do |board, json|
