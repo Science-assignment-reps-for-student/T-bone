@@ -93,7 +93,8 @@ class BoardsController < ApplicationController
       render status: :forbidden
     end
 
-    @board.update(params)
+    @board.update(title: params[:title], description: params[:description])
+    render status: :ok
   end
 
   # DELETE /boards/1
