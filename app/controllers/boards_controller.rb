@@ -45,9 +45,9 @@ class BoardsController < ApplicationController
   # POST /boards
   def create
     if current_user.user_type.zero?
-      requires(title: String, description: String)
+      requires(:title, :description)
     else
-      requires(title: String, description: String, class_number: Integer)
+      requires(:title, :description, :class_number)
     end
 
     files = {}
@@ -67,7 +67,7 @@ class BoardsController < ApplicationController
                                            description: params[:description],
                                            class_number: params[:class_number])
              end
-    ImageFile.create_image_file(@board.id, files)
+    ImageFile.create_image_file(@board.id, files) unless files.empty?
 
     render status: :created
   end
