@@ -4,7 +4,6 @@ class CreateMutualEvaluations < ActiveRecord::Migration[6.0]
 
       t.references :user, index: true
       t.references :homework, index: true
-      t.references :team, index: true
       t.references :target, index: true, foreign_key: { to_table: :users }
       t.integer :communication, null: false
       t.integer :cooperation, null: false

@@ -7,6 +7,7 @@ class CreateMultiFiles < ActiveRecord::Migration[6.0]
       t.string :file_name, null: false
       t.string :source, null: false
       t.datetime :created_at, null: false
+      t.boolean :late, null: false
     end
   end
 end

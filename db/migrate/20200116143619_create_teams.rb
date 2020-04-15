@@ -6,7 +6,7 @@ class CreateTeams < ActiveRecord::Migration[6.0]
       t.references :homework, index: true
       t.string :team_name
     end
-    add_index :teams, %i[homework_id team_name],
-              unique: true
+    add_index :teams, %i[homework_id team_name], unique: true
+    add_index :teams, %i[leader_id homework_id], unique: true
   end
 end
