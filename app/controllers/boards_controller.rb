@@ -40,7 +40,7 @@ class BoardsController < ApplicationController
     files = {}
     params[:file]&.each do |file|
       files[file.original_filename] = File.open(file)
-      if %w[.jpg .jpeg .png].include?(File.extname(file))
+      unless %w[.jpg .jpeg .png].include?(File.extname(file))
         return render status: 415
       end
     end
