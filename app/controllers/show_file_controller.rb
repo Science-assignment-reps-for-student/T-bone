@@ -19,7 +19,7 @@ class ShowFileController < ApplicationController
     file = ImageFile.find_by_id(params[:file_id])
     return render status: 404 unless file
 
-    render json: { file: file.source }
+    send_file(file.source, type: 'image/png')
   end
 
   def show_multi
