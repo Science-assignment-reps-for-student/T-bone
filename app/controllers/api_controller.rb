@@ -1,6 +1,12 @@
 class ApiController < ApplicationController
   before_action :jwt_required, except: %i[create_user auth]
 
+  def email
+    requires(:auth_code, :target)
+
+    MailMailer.auth(params[:target], params[:auth_code]).deliver_later
+  end
+
   def show
     requires(:homework_id)
     homework = Homework.find_by_id(params[:homework_id])

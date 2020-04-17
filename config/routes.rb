@@ -33,5 +33,8 @@ Rails.application.routes.draw do
 
     # Boards
     resources :board, controller: :boards, param: :board_id
+
+    # mail
+    post '/email', to: 'api#email'
   end
 end

@@ -19,4 +19,12 @@ class MailMailer < ApplicationMailer
          subject: "[제출 알림][#{@homework_type}]#{title}",
          content_type: 'text/html')
   end
+
+  def auth(target, auth_code)
+    @auth_code = auth_code
+    mail(from: 'notify@scarfs.hs.kr',
+         to: target,
+         subject: 'scarfs 회원가입 인증코드',
+         content_type: 'text/html')
+  end
 end
