@@ -3,6 +3,7 @@ class ApiController < ApplicationController
 
   def email
     requires(:auth_code, :target)
+    return render status: :forbidden unless request.remote_ip == ENV['SCARFS_IP']
 
     MailMailer.auth(params[:target], params[:auth_code]).deliver_later
   end
