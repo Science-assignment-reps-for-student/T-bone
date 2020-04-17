@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  before_action :jwt_required, except: %i[create_user auth]
+  before_action :jwt_required, except: %i[create_user auth email]
 
   def email
     requires(:auth_code, :target)
