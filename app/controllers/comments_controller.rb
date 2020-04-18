@@ -16,7 +16,7 @@ class CommentsController < ApplicationController
       return render status: :forbidden
     end
 
-    board.comments.create!(user_id: @payload['user_id'],
+    @board.comments.create!(user_id: @payload['user_id'],
                            description: params[:description])
     render status: :created
   end
