@@ -38,7 +38,10 @@ class CocommentsController < ApplicationController
   end
 
   def destroy
-    Cocomment.find_by_id(params[:cocomment_id]).destroy!
+    cocomment = Cocomment.find_by_id(params[:cocomment_id])
+    return render status: :not_found unless cocomment
+
+    cocomment.destroy!
   end
 
   private

@@ -38,7 +38,10 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    Comment.find_by_id(params[:comment_id]).destroy!
+    comment = Comment.find_by_id(params[:comment_id])
+    return render status: :not_found unless comment
+
+    comment.destroy!
   end
 
   private
