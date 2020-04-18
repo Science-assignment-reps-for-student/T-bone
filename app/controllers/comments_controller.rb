@@ -1,24 +1,33 @@
 class CommentsController < ApplicationController
+  before_action :set_board, except: :destroy
   before_action :jwt_required
 
   def show
-    render json: Board.find_by_id(params[:board_id]).comments
+    return render status: :not_found unless @board
+
+    render json: @board.comments
   end
 
   def create
-    requires(:description)
+    requires(:description, :board_id)
 
     if current_user.user_type.zero? &&
        @board.class_number != current_user.user_number / 100 - 10
       return render status: :forbidden
     end
 
-    @board.comments.create!(user_id: @payload['user_id'],
-                            description: params[:description])
+    board.comments.create!(user_id: @payload['user_id'],
+                           description: params[:description])
     render status: :created
   end
 
   def destroy
     Comment.find_by_id(params[:comment_id]).destroy!
+  end
+
+  private
+
+  def set_board
+    @board = Board.find_by_id(params[:board_id])
   end
 end
