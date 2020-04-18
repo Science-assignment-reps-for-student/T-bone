@@ -34,6 +34,13 @@ Rails.application.routes.draw do
     # Boards
     resources :board, controller: :boards, param: :board_id
 
+    # Comments
+    resources :comment, controller: :comments, param: :board_id, only: %i[show create]
+    resources :comment, controller: :comments, param: :comment_id, only: :destroy
+
+    resources :cocomment, controller: :cocomments, param: :comment_id, only: %i[show create]
+    resources :cocomment, controller: :cocomments, param: :cocomment_id, only: :destroy
+
     # mail
     post '/email', to: 'api#email'
   end
