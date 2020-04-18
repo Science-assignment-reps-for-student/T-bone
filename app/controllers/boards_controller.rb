@@ -29,31 +29,25 @@ class BoardsController < ApplicationController
 
   # GET /boards/1
   def show
+    response = {
+      board_id: @board.id,
+      writer: @board.user.user_name,
+      title: @board.title,
+      description: @board.description,
+      created_at: @board.created_at,
+      updated_at: @board.updated_at,
+      class: @board.class_number,
+      comment_id: @board.comment_ids,
+      file_id: @board.image_file_ids
+    }
     if current_user.user_type.zero?
       if @board.class_number == @board.user.user_number / 100 - 10
-        render json: {
-          board_id: @board.id,
-          writer: @board.user.user_name,
-          title: @board.title,
-          description: @board.description,
-          created_at: @board.created_at,
-          updated_at: @board.updated_at,
-          class: @board.class_number
-        }
+        render json: response
       else
         render status: :forbidden
       end
     else
-      render json: {
-        board_id: @board.id,
-        writer: @board.user.user_name,
-        title: @board.title,
-        description: @board.description,
-        file_id: @board.image_file_ids,
-        created_at: @board.created_at,
-        updated_at: @board.updated_at,
-        class: @board.class_number
-      }
+      render json: response
     end
   end
 
