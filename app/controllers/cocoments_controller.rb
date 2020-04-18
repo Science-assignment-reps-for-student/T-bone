@@ -5,7 +5,17 @@ class CocomentsController < ApplicationController
   def show
     return render status: :not_found unless @comment
 
-    render json: @comment.cocomments
+    response = []
+    @comment.cocomments.each do |cocomment|
+      response << {
+        cocomment_id: cocomment.id,
+        writer: cocomment.user.user_name,
+        description: cocomment.description,
+        created_at: cocomment.created_at,
+        updated_at: cocomment.updated_at
+      }
+    end
+    render json: response
   end
 
   def create

@@ -5,7 +5,17 @@ class CommentsController < ApplicationController
   def show
     return render status: :not_found unless @board
 
-    render json: @board.comments
+    response = []
+    @board.comments.each do |comment|
+      response << {
+        comment_id: comment.id,
+        writer: comment.user.user_name,
+        description: comment.description,
+        created_at: comment.created_at,
+        updated_at: comment.updated_at
+      }
+    end
+    render json: response
   end
 
   def create
