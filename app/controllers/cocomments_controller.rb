@@ -1,4 +1,4 @@
-class CocomentsController < ApplicationController
+class CocommentsController < ApplicationController
   before_action :set_comment
   before_action :jwt_required
 
