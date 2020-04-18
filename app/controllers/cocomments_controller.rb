@@ -42,6 +42,7 @@ class CocommentsController < ApplicationController
     return render status: :not_found unless cocomment
 
     cocomment.destroy!
+    render status: :ok
   end
 
   private

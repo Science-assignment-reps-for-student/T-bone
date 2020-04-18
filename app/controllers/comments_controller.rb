@@ -42,6 +42,7 @@ class CommentsController < ApplicationController
     return render status: :not_found unless comment
 
     comment.destroy!
+    render status:  :ok
   end
 
   private
