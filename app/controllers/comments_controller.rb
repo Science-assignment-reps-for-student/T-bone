@@ -26,9 +26,15 @@ class CommentsController < ApplicationController
       return render status: :forbidden
     end
 
-    @board.comments.create!(user_id: @payload['user_id'],
-                           description: params[:description])
-    render status: :created
+    comment = @board.comments.create!(user_id: @payload['user_id'],
+                                      description: params[:description])
+    render json: {
+      comment_id: comment.id,
+      writer: comment.user.user_name,
+      description: comment.description,
+      created_at: comment.created_at,
+      updated_at: comment.updated_at
+    }, status: :created
   end
 
   def destroy

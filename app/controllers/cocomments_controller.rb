@@ -26,9 +26,15 @@ class CocommentsController < ApplicationController
       return render status: :forbidden
     end
 
-    @comment.cocomments.create!(user_id: @payload['user_id'],
-                                description: params[:description])
-    render status: :created
+    cocomment = @comment.cocomments.create!(user_id: @payload['user_id'],
+                                            description: params[:description])
+    render json: {
+      cocomment_id: cocomment.id,
+      writer: cocomment.user.user_name,
+      description: cocomment.description,
+      created_at: cocomment.created_at,
+      updated_at: cocomment.updated_at
+    }, status: :created
   end
 
   def destroy
