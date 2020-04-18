@@ -1,6 +1,6 @@
-class CreateCocoments < ActiveRecord::Migration[6.0]
+class CreateCocomments < ActiveRecord::Migration[6.0]
   def change
-    create_table :cocoments do |t|
+    create_table :cocomments do |t|
       t.references :user, index: true
       t.references :comment, index: true
       t.text :description, null: false
