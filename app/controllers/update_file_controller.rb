@@ -9,7 +9,9 @@ class UpdateFileController < ApplicationController
 
     params[:file].each do |file|
       files[file.original_filename] = File.open(file)
-      return render status: 415 if File.extname(file) != '.hwp'
+      unless EXTNAME_WHITE_LIST.include?(File.extname(file))
+        return render status: 415
+      end
     end
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
@@ -42,7 +44,9 @@ class UpdateFileController < ApplicationController
 
     params[:file].each do |file|
       files[file.original_filename] = File.open(file)
-      return render status: 415 if File.extname(file) != '.hwp'
+      unless EXTNAME_WHITE_LIST.include?(File.extname(file))
+        return render status: 415
+      end
     end
 
     payload = @@jwt_base.get_jwt_payload(request.authorization[7..])

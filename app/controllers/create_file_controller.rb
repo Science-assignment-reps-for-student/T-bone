@@ -1,5 +1,3 @@
-EXTNAME_WHITE_LIST = %w[.hwp .jpg .png .jpeg .pptx .word .pdf].freeze
-
 class CreateFileController < ApplicationController
   before_action :jwt_required
 
