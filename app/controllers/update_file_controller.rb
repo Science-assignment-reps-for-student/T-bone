@@ -20,8 +20,10 @@ class UpdateFileController < ApplicationController
 
     return render status: 412 unless user.single_files.find_by_homework_id(homework.id)
 
-    FileUtils.rm_rf("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}")
-    user.single_files.destroy_all
+    homework.single_files.where(user_id: user.id).each do |file|
+      FileUtils.rm_rf("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file.file_name}")
+      file.destroy
+    end
 
     status = SingleFile.create_single_file(user.id,
                                            homework.id,
@@ -58,8 +60,10 @@ class UpdateFileController < ApplicationController
     return render status: 412 unless team.multi_files.find_by_homework_id(homework.id)
 
 
-    FileUtils.rm_rf("#{ENV['MULTI_FILE_PATH']}/#{homework.id}")
-    team.multi_files.destroy_all
+    homework.multi_files.where(team_id: team.id).each do |file|
+      FileUtils.rm_rf("#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{file.file_name}")
+      file.destroy
+    end
 
     MultiFile.create_multi_file(user.id,
                                 homework.id,
