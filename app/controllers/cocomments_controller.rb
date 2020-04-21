@@ -21,11 +21,6 @@ class CocommentsController < ApplicationController
   def create
     requires(:description, :comment_id)
 
-    if current_user.user_type.zero? &&
-       @comment.class_number != current_user.user_number / 100 - 10
-      return render status: :forbidden
-    end
-
     cocomment = @comment.cocomments.create!(user_id: @payload['user_id'],
                                             description: params[:description])
     render json: {
