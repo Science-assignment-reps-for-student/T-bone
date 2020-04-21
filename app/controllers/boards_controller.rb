@@ -41,7 +41,7 @@ class BoardsController < ApplicationController
       file_id: @board.image_file_ids
     }
     if current_user.user_type.zero?
-      if @board.class_number == @board.user.user_number / 100 - 10
+      if @board.class_number == current_user.user_number / 100 - 10
         render json: response
       else
         render status: :forbidden
