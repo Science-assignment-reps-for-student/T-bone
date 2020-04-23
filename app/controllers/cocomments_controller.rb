@@ -19,7 +19,7 @@ class CocommentsController < ApplicationController
   end
 
   def create
-    requires(:description, :comment_id)
+    requires(:description)
 
     cocomment = @comment.cocomments.create!(user_id: @payload['user_id'],
                                             description: params[:description])
@@ -36,7 +36,7 @@ class CocommentsController < ApplicationController
     cocomment = Cocomment.find_by_id(params[:cocomment_id])
     return render status: :not_found unless cocomment
 
-    if @comment.user != current_user && current_user.user_type.zero?
+    if cocomment.user != current_user && current_user.user_type.zero?
       render status: :forbidden
     end
 
@@ -47,6 +47,7 @@ class CocommentsController < ApplicationController
   private
 
   def set_comment
+    requires(:comment_id)
     @comment = Comment.find_by_id(params[:comment_id])
   end
 end

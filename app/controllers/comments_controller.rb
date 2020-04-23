@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :set_board
+  before_action :set_board, except: :destroy
   before_action :jwt_required
 
   def show
@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   end
 
   def create
-    requires(:description, :board_id)
+    requires(:description)
 
     if current_user.user_type.zero? &&
        @board.class_number != current_user.user_number / 100 - 10
@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
     comment = Comment.find_by_id(params[:comment_id])
     return render status: :not_found unless comment
 
-    if @board.user != current_user && current_user.user_type.zero?
+    if comment.user != current_user && current_user.user_type.zero?
       render status: :forbidden
     end
 
@@ -52,6 +52,7 @@ class CommentsController < ApplicationController
   private
 
   def set_board
+    requires(:board_id)
     @board = Board.find_by_id(params[:board_id])
   end
 end
