@@ -36,6 +36,10 @@ class CocommentsController < ApplicationController
     cocomment = Cocomment.find_by_id(params[:cocomment_id])
     return render status: :not_found unless cocomment
 
+    if @comment.user != current_user && current_user.user_type.zero?
+      render status: :forbidden
+    end
+
     cocomment.destroy!
     render status: :ok
   end

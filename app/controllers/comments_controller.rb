@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :set_board, except: :destroy
+  before_action :set_board
   before_action :jwt_required
 
   def show
@@ -40,6 +40,10 @@ class CommentsController < ApplicationController
   def destroy
     comment = Comment.find_by_id(params[:comment_id])
     return render status: :not_found unless comment
+
+    if @board.user != current_user && current_user.user_type.zero?
+      render status: :forbidden
+    end
 
     comment.destroy!
     render status: :ok
