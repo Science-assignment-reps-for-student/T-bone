@@ -38,7 +38,8 @@ class BoardsController < ApplicationController
       updated_at: @board.updated_at,
       class: @board.class_number,
       comment_id: @board.comment_ids,
-      file_id: @board.image_file_ids
+      file_id: @board.image_file_ids,
+      is_mine: @board.user == current_user
     }
     if current_user.user_type.zero?
       if @board.class_number == current_user.user_number / 100 - 10
