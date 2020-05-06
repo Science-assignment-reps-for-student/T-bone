@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  EXTNAME_WHITE_LIST = %w[.hwp .jpg .png .jpeg .pptx .word .pdf].freeze
+  EXTNAME_WHITE_LIST = %w[.hwp .jpg .png .jpeg .pptx .word .pdf .zip].freeze
 
   require 'jwt_base'
   @@jwt_base = JWTBase::JWTBase.new(ENV['SECRET_KEY_BASE'], 1.days, 2.weeks)
