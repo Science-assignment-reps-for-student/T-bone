@@ -17,13 +17,13 @@ class SingleFile < ApplicationRecord
 
     FileUtils.mkdir_p("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}")
     if files.length == 1
-      if homework.homework_type.zero?
-        file_name = "[개인][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.#{files.keys[0].split('.')[-1]}"
-        path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file_name}"
-      else
-        file_name = "[실험][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.#{files.keys[0].split('.')[-1]}"
-        path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file_name}"
-      end
+      file_name = if homework.homework_type.zero?
+                    "[개인][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.#{files.keys[0].split('.')[-1]}"
+                  else
+                    "[실험][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.#{files.keys[0].split('.')[-1]}"
+                  end
+
+      path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{user_id}/#{file_name}"
 
       created_file = homework.single_files.create!(user_id: user.id,
                                                    source: ApplicationController.upload_file(files.values[0], path),
@@ -34,7 +34,7 @@ class SingleFile < ApplicationRecord
                                   homework)
     else
       files.each do |file_name, file|
-        path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file_name}"
+        path = "#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{user_id}/#{file_name}"
         created_file = homework.single_files.create(user_id: user.id,
                                                     source: ApplicationController.upload_file(file, path),
                                                     file_name: file_name)
