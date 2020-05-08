@@ -15,7 +15,7 @@ class MultiFile < ApplicationRecord
       return 409 unless team.multi_files.blank?
     end
 
-    FileUtils.mkdir_p("#{ENV['MULTI_FILE_PATH']}/#{homework.id}")
+    FileUtils.mkdir_p("#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{user_id}")
     if files.length == 1
       file_name = "[팀][#{homework.homework_title}] #{class_num}반_#{team.team_name}조.#{files.keys[0].split('.')[-1]}"
       path = "#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{user_id}/#{file_name}"

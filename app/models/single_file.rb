@@ -15,7 +15,7 @@ class SingleFile < ApplicationRecord
       end
     end
 
-    FileUtils.mkdir_p("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}")
+    FileUtils.mkdir_p("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{user_id}")
     if files.length == 1
       file_name = if homework.homework_type.zero?
                     "[개인][#{homework.homework_title}] #{user.user_number}_#{user.user_name}.#{files.keys[0].split('.')[-1]}"
