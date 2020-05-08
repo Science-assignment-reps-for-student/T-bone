@@ -21,7 +21,7 @@ class UpdateFileController < ApplicationController
     return render status: 412 unless user.single_files.find_by_homework_id(homework.id)
 
     homework.single_files.where(user_id: user.id).each do |file|
-      FileUtils.rm_rf("#{ENV['SINGLE_FILE_PATH']}/#{homework.id}/#{file.file_name}")
+      FileUtils.rm_rf(file.source)
       file.destroy
     end
 
@@ -61,7 +61,7 @@ class UpdateFileController < ApplicationController
 
 
     homework.multi_files.where(team_id: team.id).each do |file|
-      FileUtils.rm_rf("#{ENV['MULTI_FILE_PATH']}/#{homework.id}/#{file.file_name}")
+      FileUtils.rm_rf(file.source)
       file.destroy
     end
 
