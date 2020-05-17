@@ -1,5 +1,5 @@
 class CocommentsController < ApplicationController
-  before_action :set_comment
+  before_action :set_comment, except: :destroy
   before_action :jwt_required
 
   def show
