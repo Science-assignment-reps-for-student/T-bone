@@ -37,7 +37,7 @@ class CocommentsController < ApplicationController
     return render status: :not_found unless cocomment
 
     if cocomment.user != current_user && current_user.user_type.zero?
-      render status: :forbidden
+      return render status: :forbidden
     end
 
     cocomment.destroy!

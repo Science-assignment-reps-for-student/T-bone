@@ -38,11 +38,11 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    comment = Comment.find_by_id(params[:comment_id])
+    comment = Comment.find_by_id(params[:cocomment_id])
     return render status: :not_found unless comment
 
     if comment.user != current_user && current_user.user_type.zero?
-      render status: :forbidden
+      return render status: :forbidden
     end
 
     comment.destroy!
