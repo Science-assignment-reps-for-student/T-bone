@@ -54,9 +54,9 @@ class ApiController < ApplicationController
                                 homework_description: params[:homework_description],
                                 homework_type: params[:homework_type].to_i,
                                 homework_1_deadline: Time.at(params[:homework_1_deadline].to_i),
-                                homework_2_deadline: Time.at(params[:homework_1_deadline].to_i),
-                                homework_3_deadline: Time.at(params[:homework_1_deadline].to_i),
-                                homework_4_deadline: Time.at(params[:homework_1_deadline].to_i),
+                                homework_2_deadline: Time.at(params[:homework_2_deadline].to_i),
+                                homework_3_deadline: Time.at(params[:homework_3_deadline].to_i),
+                                homework_4_deadline: Time.at(params[:homework_4_deadline].to_i),
                                 created_at: Time.now)
 
     unless params[:file].blank?
