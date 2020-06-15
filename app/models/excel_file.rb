@@ -68,8 +68,8 @@ class ExcelFile < ApplicationRecord
       cooperation = ''
 
       MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
-        communication = "#{evaluation.communication.to_i} / #{user_team.members.count * 3}"
-        cooperation = "#{evaluation.cooperation.to_i} / #{user_team.members.count * 3}"
+        communication = "#{evaluation.communication.to_i} / #{(user_team.members.count - 1) * 3}"
+        cooperation = "#{evaluation.cooperation.to_i} / #{(user_team.members.count - 1) * 3}"
       end
 
       if submit_file.blank?
