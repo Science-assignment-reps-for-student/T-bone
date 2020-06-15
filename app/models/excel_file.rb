@@ -66,8 +66,8 @@ class ExcelFile < ApplicationRecord
       cooperation_evaluations = []
 
       MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
-        communication_evaluations.append("#{evaluation.user.user_name}: #{evaluation.communication}")
-        cooperation_evaluations.append("#{evaluation.user.user_name}: #{evaluation.cooperation}")
+        communication_evaluations.append("#{evaluation.user.user_name}-의사소통: #{evaluation.communication}")
+        cooperation_evaluations.append("#{evaluation.user.user_name}-협력: #{evaluation.cooperation}")
       end
 
       if submit_file.blank?
