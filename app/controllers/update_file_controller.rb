@@ -88,9 +88,12 @@ class UpdateFileController < ApplicationController
 
     homework = Homework.find_by_id(params[:homework_id])
     return render status: 404 unless homework
+    return render status: 412 unless homework.excel_file
 
-    FileUtils.rm_rf(homework.excel_file.source)
-    homework.excel_file.destroy
+    if homework.excel_file
+      FileUtils.rm_rf(homework.excel_file.source)
+      homework.excel_file.destroy
+    end
 
     ExcelFile.create_excel(homework.id)
     render status: 200
