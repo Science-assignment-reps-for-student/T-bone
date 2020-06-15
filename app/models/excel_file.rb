@@ -19,11 +19,9 @@ class ExcelFile < ApplicationRecord
     sheets.each do |sheet|
       sheet.default_format = format_default
       sheet.row(0)[5] = '자기 평가'
-      sheet.row(0)[8] = '상호 평가'
       sheet.merge_cells(0, 0, 0, 4)
       sheet.merge_cells(0, 5, 0, 7)
-      sheet.merge_cells(0, 8, 0, 9)
-      sheet.row(1).push('조', '학번', '이름', '제출 일시', '지각 여부', '과학적 정확성', '의사소통', '흥미/태도(협력)', '의사소통', '공동체(협력)')
+      sheet.row(1).push('조', '학번', '이름', '제출 일시', '지각 여부', '과학적 정확성', '의사소통', '흥미/태도(협력)')
     end
 
     row_set = [2, 2, 2, 2]
@@ -64,12 +62,12 @@ class ExcelFile < ApplicationRecord
         attitude = nil
       end
 
-      communication = ''
-      cooperation = ''
+      communication_evaluations = []
+      cooperation_evaluations = []
 
       MutualEvaluation.where(target_id: user.id, homework_id: homework.id).each do |evaluation|
-        communication = "#{evaluation.communication.to_i} / #{(user_team.members.count - 1) * 3}"
-        cooperation = "#{evaluation.cooperation.to_i} / #{(user_team.members.count - 1) * 3}"
+        communication_evaluations.append("#{evaluation.user.user_name}: #{evaluation.communication}")
+        cooperation_evaluations.append("#{evaluation.user.user_name}: #{evaluation.cooperation}")
       end
 
       if submit_file.blank?
@@ -82,8 +80,8 @@ class ExcelFile < ApplicationRecord
                                                scientific_accuracy,
                                                self_communication,
                                                attitude,
-                                               communication,
-                                               cooperation)
+                                               *communication_evaluations,
+                                               *cooperation_evaluations)
       else
         sheets[class_number - 1].default_format = format_default
         sheets[class_number - 1].row(row).push(user_team.team_name,
@@ -94,8 +92,8 @@ class ExcelFile < ApplicationRecord
                                                scientific_accuracy,
                                                self_communication,
                                                attitude,
-                                               communication,
-                                               cooperation)
+                                               *communication_evaluations,
+                                               *cooperation_evaluations)
       end
       row_set[class_number - 1] += 1
     end
