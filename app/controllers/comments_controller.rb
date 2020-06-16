@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
     @board.comments.each do |comment|
       response << {
         comment_id: comment.id,
-        writer: comment.user.user_name,
+        writer: "#{comment.user.user_number} #{comment.user.user_name}",
         description: comment.description,
         created_at: comment.created_at,
         updated_at: comment.updated_at

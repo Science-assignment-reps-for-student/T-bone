@@ -9,7 +9,7 @@ class CocommentsController < ApplicationController
     @comment.cocomments.each do |cocomment|
       response << {
         cocomment_id: cocomment.id,
-        writer: cocomment.user.user_name,
+        writer: "#{cocomment.user.user_number} #{cocomment.user.user_name}",
         description: cocomment.description,
         created_at: cocomment.created_at,
         updated_at: cocomment.updated_at
