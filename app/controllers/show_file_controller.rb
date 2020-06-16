@@ -83,7 +83,7 @@ class ShowFileController < ApplicationController
     end
 
     FileUtils.rm_rf("#{path}/[#{homework_type}]#{homework.homework_title}.zip")
-    system("zip --junk-paths #{path}/'[#{homework_type}]#{homework.homework_title}'.zip #{path}/#{homework.id}/*")
+    system("zip -r -j #{path}/'[#{homework_type}]#{homework.homework_title}'.zip #{path}/#{homework.id}/*")
     send_file("#{path}/[#{homework_type}]#{homework.homework_title}.zip")
   end
 end
