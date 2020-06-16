@@ -150,7 +150,7 @@ class ApiController < ApplicationController
                          team_name: file.team.team_name)
       end
       if homework.excel_file
-        response[:file_excel_name] = homework.excel_file.file_name
+        response[:file_excel_name] = "#{homework.id}.xls"
       end
     elsif homework.homework_type == 2
 
