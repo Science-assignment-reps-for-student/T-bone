@@ -140,6 +140,15 @@ class ApiController < ApplicationController
 
     file_info = []
     response = {}
+    case homework.homework_type
+
+    when 0
+      homework_type = '개인'
+    when 1
+      homework_type = '팀'
+    when 2
+      homework_type = '실험'
+    end
 
     if homework.homework_type == 1
 
@@ -150,7 +159,7 @@ class ApiController < ApplicationController
                          team_name: file.team.team_name)
       end
       if homework.excel_file
-        response[:file_excel_name] = "#{homework.id}.xls"
+        response[:file_excel_name] = "[#{homework_type}] #{homework.homework_title}.xls"
       end
     elsif homework.homework_type == 2
 
@@ -171,17 +180,6 @@ class ApiController < ApplicationController
                          user_id: file.user.id,
                          user_number: file.user.user_number)
       end
-    end
-
-    case homework.homework_type
-
-    when 0
-      homework_type = '개인'
-    when 1
-      homework_type = '팀'
-    when 2
-      homework_type = '실험'
-
     end
 
     response[:file_info] = file_info
