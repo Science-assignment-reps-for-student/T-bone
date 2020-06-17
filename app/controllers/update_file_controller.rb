@@ -57,7 +57,7 @@ class UpdateFileController < ApplicationController
     team = homework.teams.find_by_leader_id(user.id)
 
     return render status: 403 unless team
-    return render status: 412 unless team.multi_files.find_by_homework_id(homework.id)
+    return render status: 412 unless team.multi_files
 
 
     homework.multi_files.where(team_id: team.id).each do |file|
