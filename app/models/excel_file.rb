@@ -105,7 +105,7 @@ class ExcelFile < ApplicationRecord
                     when 2
                       '실험'
                     end
-    file_name = "'[#{homework_type}] #{homework.homework_title}.xlsx'"
+    file_name = "'[#{homework_type}] #{homework.homework_title}.xls'"
     path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{file_name}"
 
     FileUtils.mkdir_p("#{ENV['EXCEL_FILE_PATH']}/#{homework.id}")
