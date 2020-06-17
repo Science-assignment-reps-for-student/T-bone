@@ -97,7 +97,6 @@ class ExcelFile < ApplicationRecord
       end
       row_set[class_number - 1] += 1
     end
-    path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{homework.id}.xls"
     homework_type = case homework.homework_type
                     when 0
                       '개인'
@@ -106,12 +105,14 @@ class ExcelFile < ApplicationRecord
                     when 2
                       '실험'
                     end
+    file_name = "'[#{homework_type}] #{homework.homework_title}.xlsx'"
+    path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{file_name}"
 
     FileUtils.mkdir_p("#{ENV['EXCEL_FILE_PATH']}/#{homework.id}")
 
     book.write(path)
     ExcelFile.create!(homework_id: homework.id,
                       source: path,
-                      file_name: "'[#{homework_type}] #{homework.homework_title}.xls'")
+                      file_name: file_name)
   end
 end
