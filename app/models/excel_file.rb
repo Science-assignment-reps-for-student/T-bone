@@ -11,7 +11,6 @@ class ExcelFile < ApplicationRecord
 
     set_form(sheets)
 
-
     Team.where(homework_id: homework_id).order(team_name: :asc).each do |team|
       class_number = team.users.last.user_number / 100 - 10
 
@@ -57,7 +56,7 @@ class ExcelFile < ApplicationRecord
                       file_name: file_name)
   end
 
-  def set_form(sheets)
+  def self.set_form(sheets)
     sheets.each do |sheet|
       sheet.default_format = Spreadsheet::Format.new(horizontal_align: :center)
       sheet.merge_cells(0, 10, 0, 12)
