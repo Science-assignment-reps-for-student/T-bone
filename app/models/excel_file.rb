@@ -47,6 +47,15 @@ class ExcelFile < ApplicationRecord
       end
     end
 
+    homework_type = case homework.homework_type
+                    when 0
+                      '개인'
+                    when 1
+                      '팀'
+                    when 2
+                      '실험'
+                    end
+
     file_name = "'[#{homework_type}] #{homework.homework_title}.xls'"
     path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{file_name}"
 
