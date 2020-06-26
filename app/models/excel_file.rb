@@ -31,9 +31,9 @@ class ExcelFile < ApplicationRecord
         communication = mutual_evaluation.map(&:communication)
         cooperation = mutual_evaluation.map(&:cooperation)
 
-        sheets[class_number - 1].row(row).push(communication,
+        sheets[class_number - 1].row(row).push(*communication,
                                                communication.sum)
-        sheets[class_number - 1].row(row + 1).push(cooperation,
+        sheets[class_number - 1].row(row + 1).push(*cooperation,
                                                    cooperation.sum)
 
         self_evaluation = user.self_evaluations
