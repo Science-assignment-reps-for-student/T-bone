@@ -28,13 +28,8 @@ class ExcelFile < ApplicationRecord
                                                    target_id: user.id)
                                             .order(user_number: :asc)
 
-        communication = mutual_evaluation.map(&:communication)
-        cooperation = mutual_evaluation.map(&:cooperation)
-
-        sheets[class_number - 1].row(row).push(*communication,
-                                               communication.sum)
-        sheets[class_number - 1].row(row + 1).push(*cooperation,
-                                                   cooperation.sum)
+        sheets[class_number - 1].row(row)[5..8] = mutual_evaluation.map(&:communication)
+        sheets[class_number - 1].row(row + 1)[5..8] = mutual_evaluation.map(&:cooperation)
 
         self_evaluation = user.self_evaluations
                               .find_by_homework_id(homework.id)
