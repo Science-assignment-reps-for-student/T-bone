@@ -39,6 +39,8 @@ class ExcelFile < ApplicationRecord
         self_evaluation = user.self_evaluations
                               .find_by_homework_id(homework.id)
 
+        next unless self_evaluation
+
         sheets[class_number - 1].row(row)[10] = self_evaluation.scientific_accuracy
         sheets[class_number - 1].row(row)[11] = self_evaluation.communication
         sheets[class_number - 1].row(row)[12] = self_evaluation.attitude
