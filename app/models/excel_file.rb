@@ -28,12 +28,12 @@ class ExcelFile < ApplicationRecord
                                                    target_id: user.id)
                                             .order(user_number: :asc)
 
-        sheets[class_number - 1].row(row)[5..9] = mutual_evaluation.map(&:communication),
-                                                  mutual_evaluation.map(&:communication)
-                                                                   .sum
-        sheets[class_number - 1].row(row + 1)[5..9] = mutual_evaluation.map(&:cooperation),
-                                                      mutual_evaluation.map(&:cooperation)
-                                                                       .sum
+        sheets[class_number - 1].row(row)[5..8] = mutual_evaluation.map(&:communication)
+        sheets[class_number - 1].row(row + 1)[5..8] = mutual_evaluation.map(&:cooperation)
+        sheets[class_number - 1].row(row)[9] = mutual_evaluation.map(&:communication)
+                                                                .sum
+        sheets[class_number - 1].row(row)[9] = mutual_evaluation.map(&:cooperation)
+                                                                .sum
 
         self_evaluation = user.self_evaluations
                               .find_by_homework_id(homework.id)
