@@ -32,7 +32,7 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row + 1)[5..8] = mutual_evaluation.map(&:cooperation)
         sheets[class_number - 1].row(row)[9] = mutual_evaluation.map(&:communication)
                                                                 .sum
-        sheets[class_number - 1].row(row)[9] = mutual_evaluation.map(&:cooperation)
+        sheets[class_number - 1].row(row + 1)[9] = mutual_evaluation.map(&:cooperation)
                                                                 .sum
 
         self_evaluation = user.self_evaluations
