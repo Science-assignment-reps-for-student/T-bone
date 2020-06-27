@@ -11,10 +11,12 @@ class ExcelFile < ApplicationRecord
 
     set_form(sheets)
 
+    row_set = [3, 3, 3, 3]
     Team.where(homework_id: homework_id).order(team_name: :asc).each do |team|
       class_number = team.users.last.user_number / 100 - 10
-      team.users.order(user_number: :asc).each_with_index do |user, index|
-        row = index * 2 + 1
+      team.users.order(user_number: :asc).each do |user|
+        row = row_set[class_number - 1]
+        row_set[class_number - 1] += 2
 
         sheets[class_number - 1].row(row)[0] = team.team_name
         sheets[class_number - 1].row(row)[1] = user.user_number
@@ -33,7 +35,7 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row)[9] = mutual_evaluation.map(&:communication)
                                                                 .sum
         sheets[class_number - 1].row(row + 1)[9] = mutual_evaluation.map(&:cooperation)
-                                                                .sum
+                                                                    .sum
 
         self_evaluation = user.self_evaluations
                               .find_by_homework_id(homework.id)
