@@ -11,11 +11,11 @@ class ExcelFile < ApplicationRecord
 
     set_form(sheets)
 
-    Team.where(homework_id: homework_id).order(team_name: :asc).each_with_index do |team, index|
+    Team.where(homework_id: homework_id).order(team_name: :asc).each do |team|
       class_number = team.users.last.user_number / 100 - 10
+      team.users.order(user_number: :asc).each_with_index do |user, index|
+        row = index * 2 + 1
 
-      row = index * 2 + 1
-      team.users.order(user_number: :asc).each do |user|
         sheets[class_number - 1].row(row)[0] = team.team_name
         sheets[class_number - 1].row(row)[1] = user.user_number
         sheets[class_number - 1].row(row)[2] = user.user_name
