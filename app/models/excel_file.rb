@@ -24,7 +24,7 @@ class ExcelFile < ApplicationRecord
         sheets[class_number - 1].row(row)[3] = team.multi_files
                                                    .last
                                                    .created_at
-                                                   .strftime('%Y-%m-%d %T')
+                                                   .strftime("%Y-%m-%d\n%T")
         mutual_evaluation = MutualEvaluation.joins(:user)
                                             .where(homework_id: homework_id,
                                                    target_id: user.id)
@@ -44,11 +44,16 @@ class ExcelFile < ApplicationRecord
         self_evaluation = user.self_evaluations
                               .find_by_homework_id(homework.id)
 
+        sheets[class_number - 1].row(row)[10] = mutual_evaluation.map(&:communication)
+                                                                 .sum +
+                                                mutual_evaluation.map(&:cooperation)
+                                                                 .sum
+
         next unless self_evaluation
 
-        sheets[class_number - 1].row(row)[10] = self_evaluation.scientific_accuracy
-        sheets[class_number - 1].row(row)[11] = self_evaluation.communication
-        sheets[class_number - 1].row(row)[12] = self_evaluation.attitude
+        sheets[class_number - 1].row(row)[11] = self_evaluation.scientific_accuracy
+        sheets[class_number - 1].row(row)[12] = self_evaluation.communication
+        sheets[class_number - 1].row(row)[13] = self_evaluation.attitude
       end
     end
 
@@ -75,10 +80,10 @@ class ExcelFile < ApplicationRecord
   def self.set_form(sheets)
     sheets.each do |sheet|
       sheet.default_format = Spreadsheet::Format.new(horizontal_align: :center)
-      sheet.merge_cells(0, 10, 0, 12)
-      (10..12).each { |i| sheet.merge_cells(1, i, 2, i)}
-      (0..12).each do |i|
-        sheet.merge_cells(0, i, 2, i) unless (10..12).include?(i)
+      sheet.merge_cells(0, 11, 0, 13)
+      (11..13).each { |i| sheet.merge_cells(1, i, 2, i)}
+      (0..13).each do |i|
+        sheet.merge_cells(0, i, 2, i) unless (11..13).include?(i)
         (1..22).each { |j| sheet.merge_cells(j * 3, i, j * 3 + 2, i) unless (4..9).include?(i)}
       end
 
@@ -92,12 +97,13 @@ class ExcelFile < ApplicationRecord
                         '모둠원 C',
                         '모둠원 D',
                         '모둠 합산',
+                        '총 합산',
                         '자기평가')
-      sheet.row(1)[10] = '과학적 정확성'
-      sheet.row(1)[11] = '의사소통'
-      sheet.row(1)[12] = '흥미/태도(협력)'
+      sheet.row(1)[11] = '과학적 정확성'
+      sheet.row(1)[12] = '의사소통'
+      sheet.row(1)[13] = '흥미/태도(협력)'
       (3..68).each do |i|
-        sheet.row(i)[4] = if (i % 3).zero?
+        sheet.row(i)[4] = if i % 3 == 0
                             '평가자'
                           elsif i % 3 == 1
                             '의사소통'
