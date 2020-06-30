@@ -77,6 +77,52 @@ class ExcelFile < ApplicationRecord
                       file_name: file_name)
   end
 
+  def self.singular_excel(homework_id)
+    homework = Homework.find_by_id(homework_id)
+
+    book = Spreadsheet::Workbook.new
+    sheets = [book.create_worksheet(name: '1반'),
+              book.create_worksheet(name: '2반'),
+              book.create_worksheet(name: '3반'),
+              book.create_worksheet(name: '4반')]
+
+    sheets.each do |sheet|
+      sheet.default_format = Spreadsheet::Format.new(horizontal_align: :center)
+      sheet.row(0).push('학번', '이름', '제출 시각')
+    end
+
+    row_set = [1, 1, 1, 1]
+    homework.single_files.each do |single_file|
+      user = single_file.user
+      class_number = user.user_number / 100 - 10
+      row = row_set[class_number - 1]
+      row_set[class_number - 1] += 1
+
+      sheets[class_number - 1].row(row).push(user.user_number,
+                                             user.user_name,
+                                             single_file.created_at)
+    end
+
+    homework_type = case homework.homework_type
+                    when 0
+                      '개인'
+                    when 1
+                      '팀'
+                    when 2
+                      '실험'
+                    end
+
+    file_name = "'[#{homework_type}] #{homework.homework_title}.xls'"
+    path = "#{ENV['EXCEL_FILE_PATH']}/#{homework.id}/#{file_name}"
+
+    FileUtils.mkdir_p("#{ENV['EXCEL_FILE_PATH']}/#{homework.id}")
+
+    book.write(path)
+    ExcelFile.create!(homework_id: homework.id,
+                      source: path,
+                      file_name: file_name)
+  end
+
   def self.set_form(sheets)
     sheets.each do |sheet|
       sheet.default_format = Spreadsheet::Format.new(horizontal_align: :center)

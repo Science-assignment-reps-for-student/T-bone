@@ -158,9 +158,6 @@ class ApiController < ApplicationController
                          team_id: file.team.id,
                          team_name: file.team.team_name)
       end
-      if homework.excel_file
-        response[:file_excel_name] = "[#{homework_type}] #{homework.homework_title}.xls"
-      end
     elsif homework.homework_type == 2
 
       homework.single_files.each do |file|
@@ -169,17 +166,17 @@ class ApiController < ApplicationController
                          user_id: file.user.id,
                          user_number: file.user.user_number)
       end
-      if homework.excel_file
-        response[:file_excel_name] = homework.excel_file.file_name
-      end
     else
-
       homework.single_files.each do |file|
         file_info.append(file_name: file.file_name,
                          file_id: file.id,
                          user_id: file.user.id,
                          user_number: file.user.user_number)
       end
+    end
+
+    if homework.excel_file
+      response[:file_excel_name] = "[#{homework_type}] #{homework.homework_title}.xls"
     end
 
     response[:file_info] = file_info

@@ -80,12 +80,6 @@ class UpdateFileController < ApplicationController
   def update_excel
     requires(:homework_id)
 
-    payload = @@jwt_base.get_jwt_payload(request.authorization[7..])
-
-    if User.find_by_id(payload['user_id']).user_type < 1
-      return render status: 403
-    end
-
     homework = Homework.find_by_id(params[:homework_id])
     return render status: 404 unless homework
 
@@ -94,7 +88,12 @@ class UpdateFileController < ApplicationController
       homework.excel_file.destroy
     end
 
-    ExcelFile.create_excel(homework.id)
+    case homework.homework_type
+    when 0
+      ExcelFile.singular_excel(homework.id)
+    else
+      ExcelFile.create_excel(homework.id)
+    end
     render status: 200
   end
 end
