@@ -78,8 +78,6 @@ class ExcelFile < ApplicationRecord
   end
 
   def self.singular_excel(homework_id)
-    homework = Homework.find_by_id(homework_id)
-
     book = Spreadsheet::Workbook.new
     sheets = [book.create_worksheet(name: '1반'),
               book.create_worksheet(name: '2반'),
@@ -92,8 +90,8 @@ class ExcelFile < ApplicationRecord
     end
 
     row_set = [1, 1, 1, 1]
-    homework.single_files.each do |single_file|
-      user = single_file.user
+    User.where(user_type: 0).order(user_number: :asc).each do |user|
+      single_file = user.single_files.find_by_homework_id(homework_id)
       class_number = user.user_number / 100 - 10
       row = row_set[class_number - 1]
       row_set[class_number - 1] += 1
