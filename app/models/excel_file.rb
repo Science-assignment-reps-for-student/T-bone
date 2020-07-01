@@ -100,7 +100,8 @@ class ExcelFile < ApplicationRecord
 
       sheets[class_number - 1].row(row).push(user.user_number,
                                              user.user_name,
-                                             single_file.created_at)
+                                             single_file.created_at
+                                                        .strftime("%Y-%m-%d\n%T"))
     end
 
     homework_type = case homework.homework_type
