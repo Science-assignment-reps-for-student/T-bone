@@ -78,6 +78,7 @@ class ExcelFile < ApplicationRecord
   end
 
   def self.singular_excel(homework_id)
+    homework = Homework.find_by_id(homework_id)
     book = Spreadsheet::Workbook.new
     sheets = [book.create_worksheet(name: '1반'),
               book.create_worksheet(name: '2반'),
@@ -120,7 +121,7 @@ class ExcelFile < ApplicationRecord
     FileUtils.mkdir_p("#{ENV['EXCEL_FILE_PATH']}/#{homework.id}")
 
     book.write(path)
-    ExcelFile.create!(homework_id: homework_id,
+    ExcelFile.create!(homework_id: homework.id,
                       source: path,
                       file_name: file_name)
   end
