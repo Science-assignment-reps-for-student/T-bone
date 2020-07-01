@@ -175,10 +175,7 @@ class ApiController < ApplicationController
       end
     end
 
-    if homework.excel_file
-      response[:file_excel_name] = "[#{homework_type}] #{homework.homework_title}.xls"
-    end
-
+    response[:file_excel_name] = "[#{homework_type}] #{homework.homework_title}.xls"
     response[:file_info] = file_info
     response[:file_zip_info] = "[#{homework_type}]#{homework.homework_title}.zip"
 
