@@ -96,10 +96,13 @@ class ExcelFile < ApplicationRecord
       row = row_set[class_number - 1]
       row_set[class_number - 1] += 1
 
-      sheets[class_number - 1].row(row).push(user.user_number,
-                                             user.user_name,
-                                             single_file.created_at
-                                                        .strftime("%Y-%m-%d\n%T"))
+
+      sheets[class_number - 1].row(row)[0] = user.user_number
+      sheets[class_number - 1].row(row)[1] = user.user_name
+      if single_file
+        sheets[class_number - 1].row(row)[2] = single_file.created_at
+                                                          .strftime("%Y-%m-%d\n%T")
+      end
     end
 
     homework_type = case homework.homework_type
